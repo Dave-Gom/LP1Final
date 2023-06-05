@@ -1,5 +1,9 @@
 #include "header.h"
 
+/**
+ * @brief Lee la configuracion de dimension del tablero
+ * @param nick
+ */
 void visualizarConfiguracion(char nick[])
 {
     int ancho, alto;
@@ -7,7 +11,6 @@ void visualizarConfiguracion(char nick[])
     char nombreArchivo[100] = "";
     strcat(nombreArchivo, nick);
     strcat(nombreArchivo, "_configuracion.txt");
-    printf("\n nombre del archivo: %s", nombreArchivo);
     Archivo *ptrConfiguracion = abreArchivoGenerico(nombreArchivo, "r");
     if (ptrConfiguracion != NULL && !feof(ptrConfiguracion->punteroArchivo))
     {
@@ -15,7 +18,14 @@ void visualizarConfiguracion(char nick[])
         fscanf(ptrConfiguracion->punteroArchivo, "%s", altoChar);
         sscanf(anchoChar, "Ancho=%d", &ancho);
         sscanf(altoChar, "Alto=%d", &alto);
-        printf("Las dimensiones del tablero son: %d x %d\n", ancho, alto);
+        if (ancho == 0 && alto == 0)
+        {
+            printf("Las dimensiones del tablero son: %d x %d\n", 10, 10);
+        }
+        else
+        {
+            printf("Las dimensiones del tablero son: %d x %d\n", ancho, alto);
+        }
     }
     else
     {
@@ -136,7 +146,6 @@ Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[])
     char generico[100];
     if ((ptrNuevoArchivo->punteroArchivo = fopen(nombreArchivo, modo)) == NULL)
     {
-        printf("aca");
         if ((ptrNuevoArchivo->punteroArchivo = fopen(nombreArchivo, "w+")) != NULL)
         {
             return ptrNuevoArchivo; // retorna el puntero al archivo si hubo exito
@@ -149,8 +158,6 @@ Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[])
     }
     else
     {
-        printf("\nNo, aca aca\n");
-
         return ptrNuevoArchivo; // retorna el puntero al archivo si hubo exito
     }
 }
