@@ -1,5 +1,56 @@
 #include "header.h"
 
+
+/**
+ * @brief funcion central del juego, despliega el menu y decide que funcion llamar atendiendo a la seleccion del usuario
+ * @param nick
+ */
+void inicia(char nick[])
+{
+    int opcion;
+    printf("\nBienvenido %s\n", nick);
+    do
+    {
+
+        printf("A continuación, muestra por pantalla el siguiente menú:\n");
+        printf("1. Visualizar configuración del tablero.\n");
+        printf("2. Configurar parámetros.\n");
+        printf("3. Ver estadísticas.\n");
+        printf("4. Jugar partida.\n");
+        printf("5. Ayuda.\n");
+        printf("6. Salir.\n");
+        printf("Ingresa el número de la opción deseada: ");
+        scanf("%d", &opcion);
+
+        switch (opcion)
+        {
+        case 1:
+            visualizarConfiguracion(nick);
+            break;
+        case 2:
+            configurarParametros(nick);
+            break;
+        case 3:
+            verEstadisticas();
+            break;
+        case 4:
+            jugarPartida(nick);
+            break;
+        case 5:
+            mostrarAyuda();
+            break;
+        case 6:
+            printf("Gracias por usar el programa. ¡Hasta luego!\n");
+            break;
+        default:
+            printf("Opción inválida. Por favor, ingresa un número del 1 al 6.\n");
+        }
+
+        printf("\n");
+    } while (opcion != 6);
+}
+
+
 /**
  * @brief Lee la configuracion de dimension del tablero
  * @param nick
@@ -62,45 +113,21 @@ void verEstadisticas()
 void jugarPartida(char nick[])
 {
     int ancho = 0, alto = 0;
-    leeConfiguracion(&ancho, &alto, nick);
     int turno = 0;
     int valor;
     int resultado = 0;
-    printf("\n Tablero de %dx%d", alto, ancho);
-    printf("\n Tablero de %dx%d", alto, ancho);
-    int tablero[alto][ancho];
-    iniciaMatriz(alto, ancho, tablero);
-    imprimeMatrizFormat(alto, ancho, tablero);
+    leeConfiguracion(&ancho, &alto, nick);
+    Matriz *ptrTablero = inicializaMatriz(alto, ancho);
+    iniciaMatriz(ptrTablero);
+    imprimeMatrizFormat(*ptrTablero);
+
     do
     {
-        if (turno % 2 == 0)
-        {
-            printf("Juega user");
-            juegaUser(alto, ancho, tablero);
-            valor = 1;
-            turno++;
+        if(turno % 2 == 0){
+            
         }
-        else
-        {
-            printf("Juega IA");
-            valor = 2;
-            turno++;
-        }
-
-        imprimeMatrizFormat(alto, ancho, tablero);
-
-        // Verificar cuadrado después de actualizar el turno en la matriz
-        resultado = verificarCuadrado(ancho, alto, tablero, valor);
-        if (resultado == 1)
-        {
-            printf("\n SI: %d", resultado);
-        }
-        else
-        {
-            printf("\n NO: %d", resultado);
-        }
-
     } while (resultado == 0);
+    
 }
 
 void mostrarAyuda()
@@ -109,54 +136,6 @@ void mostrarAyuda()
     // Agrega aquí el código para mostrar la ayuda
 }
 
-/**
- * @brief funcion central del juego, despliega el menu y decide que funcion llamar atendiendo a la seleccion del usuario
- * @param nick
- */
-void inicia(char nick[])
-{
-    int opcion;
-    printf("\nBienvenido %s\n", nick);
-    do
-    {
-
-        printf("A continuación, muestra por pantalla el siguiente menú:\n");
-        printf("1. Visualizar configuración del tablero.\n");
-        printf("2. Configurar parámetros.\n");
-        printf("3. Ver estadísticas.\n");
-        printf("4. Jugar partida.\n");
-        printf("5. Ayuda.\n");
-        printf("6. Salir.\n");
-        printf("Ingresa el número de la opción deseada: ");
-        scanf("%d", &opcion);
-
-        switch (opcion)
-        {
-        case 1:
-            visualizarConfiguracion(nick);
-            break;
-        case 2:
-            configurarParametros(nick);
-            break;
-        case 3:
-            verEstadisticas();
-            break;
-        case 4:
-            jugarPartida(nick);
-            break;
-        case 5:
-            mostrarAyuda();
-            break;
-        case 6:
-            printf("Gracias por usar el programa. ¡Hasta luego!\n");
-            break;
-        default:
-            printf("Opción inválida. Por favor, ingresa un número del 1 al 6.\n");
-        }
-
-        printf("\n");
-    } while (opcion != 6);
-}
 
 /**
  * @brief Abre o crea forzada un archivo dado su nombre y modo
@@ -228,54 +207,13 @@ void leeConfiguracion(int *ancho, int *alto, char nick[])
  *
  * @author David Gomez
  */
-void iniciaMatriz(const int fila, const int colum, int matriz[][colum])
+void iniciaMatriz(Matriz *ptrMatriz)
 {
     int i, j;
-    for (i = 0; i < fila; i++)
+    for (i = 0; i < ptrMatriz->fila; i++)
     {
-        for (j = 0; j < colum; j++)
-            matriz[i][j] = 0;
-    }
-}
-
-int verificarCuadrado(int ancho, int alto, int matriz[alto][ancho], int valor)
-{
-    int contador = 0;
-
-    for (int i = 0; i < alto; i++)
-    {
-        for (int j = 0; j < ancho; j++)
-        {
-            if (matriz[i][j] == valor)
-            {
-                // Verificar si se encuentra el valor en las cuatro esquinas del cuadrado
-                if (i > 0 && j > 0 && matriz[i - 1][j - 1] == valor && matriz[i - 1][j] == valor && matriz[i][j - 1] == valor)
-                {
-                    contador++;
-                }
-                if (i > 0 && j < ancho - 1 && matriz[i - 1][j + 1] == valor && matriz[i - 1][j] == valor && matriz[i][j + 1] == valor)
-                {
-                    contador++;
-                }
-                if (i < alto - 1 && j > 0 && matriz[i + 1][j - 1] == valor && matriz[i + 1][j] == valor && matriz[i][j - 1] == valor)
-                {
-                    contador++;
-                }
-                if (i < alto - 1 && j < ancho - 1 && matriz[i + 1][j + 1] == valor && matriz[i + 1][j] == valor && matriz[i][j + 1] == valor)
-                {
-                    contador++;
-                }
-            }
-        }
-    }
-
-    if (contador >= 4)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
+        for (j = 0; j < ptrMatriz->columna; j++)
+            ptrMatriz->matriz[i][j] = 0;
     }
 }
 
@@ -306,6 +244,7 @@ void juegaUser(int fila, int columna, int matriz[fila][columna])
     matriz[i][j] = 1;
 }
 
+
 /**
  * @brief Imprimie una matriz formateada en forma de Table
  *
@@ -313,17 +252,17 @@ void juegaUser(int fila, int columna, int matriz[fila][columna])
  * @param columnas Cantidad de columnas
  * @param Matriz Matriz a ser impresa
  */
-void imprimeMatrizFormat(int filas, int columnas, int Matriz[][columnas])
+void imprimeMatrizFormat(Matriz matriz)
 {
     int i;
     int j;
 
     printf("\n\nEste es el tablero:\n\n");
-    for (i = 0; i < filas; i++)
+    for (i = 0; i < matriz.fila; i++)
     {
-        for (j = 0; j < columnas; j++)
+        for (j = 0; j < matriz.columna; j++)
         {
-            printf("%d ", Matriz[i][j]);
+            printf("%d ", matriz.matriz[i][j]);
         }
         printf("\n");
     }
@@ -331,37 +270,23 @@ void imprimeMatrizFormat(int filas, int columnas, int Matriz[][columnas])
     printf("\n");
 }
 
-// Función para calcular la distancia entre dos puntos
-double calcularDistancia(Punto p1, Punto p2)
-{
-    double dx = p2.x - p1.x;
-    double dy = p2.y - p1.y;
-    return sqrt(dx * dx + dy * dy);
-}
 
-// Función para verificar si los puntos forman un cuadrado
-int verificarCuadrado(Punto p1, Punto p2, Punto p3, Punto p4)
-{
-    double d12 = calcularDistancia(p1, p2);
-    double d13 = calcularDistancia(p1, p3);
-    double d14 = calcularDistancia(p1, p4);
-    double d23 = calcularDistancia(p2, p3);
-    double d24 = calcularDistancia(p2, p4);
-    double d34 = calcularDistancia(p3, p4);
+// Punto *jugar(int valor, int fila, int col, int matriz[][col]){
+//     Punto *nuevoPunto = malloc(sizeof(Punto));
 
-    // Verificar si hay dos distancias iguales y una distancia mayor que las otras dos
-    if ((d12 == d34 && d13 == d24 && d14 > d12 && d14 > d13) ||
-        (d13 == d24 && d12 == d34 && d14 > d13 && d14 > d12) ||
-        (d14 == d23 && d12 == d34 && d13 > d14 && d13 > d12))
+//     return nuevoPunto;
+// }
+
+Matriz *inicializaMatriz(int filas, int columnas){
+    Matriz *ptrMatriz = malloc(sizeof(Matriz));
+    int i;
+    ptrMatriz->fila = filas;
+    ptrMatriz->columna = columnas;
+    ptrMatriz->matriz = malloc(filas * sizeof(int *));
+    for ( i = 0; i < filas; i++)
     {
-
-        // Verificar los ángulos formados por los segmentos entre los puntos
-        double angulo = fabs(atan2(p2.y - p1.y, p2.x - p1.x) - atan2(p4.y - p1.y, p4.x - p1.x));
-        if (fabs(angulo - M_PI / 2) < 1e-6)
-        {
-            return 1; // Los puntos forman un cuadrado
-        }
+        ptrMatriz->matriz[i] = malloc(columnas * sizeof(int));
     }
 
-    return 0; // Los puntos no forman un cuadrado
+    return ptrMatriz;
 }
