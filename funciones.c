@@ -123,13 +123,94 @@ void jugarPartida(char nick[])
     imprimeMatrizFormat(*ptrTablero);
     Punto JugadasJugador1[(ancho * alto) / 2];
     Punto JugadasJugador2[(ancho * alto) / 2];
+    int arr[] = {1, 2, 3, 4, 5, 6}; // Reemplaza 'a', 'b', 'c', 'd', 'e', 'f' por los valores reales
+    // int n = sizeof(arr) / sizeof(arr[0]);
 
-        do
-        {
-                JugadasJugador1[turno1] = *jugar(1, ptrTablero, 0);
-                turno1++;
-                imprimeJugadas(JugadasJugador1, turno1);
-        } while ((turno1) != 5);
+    int n = 4; // Número de elementos en el arreglo
+
+    // Crear el arreglo de puntos array
+    Punto **array = malloc(n * sizeof(Punto *));
+    for (int i = 0; i < n; i++) {
+        array[i] = malloc(4 * sizeof(Punto));
+    }
+
+    // Rellenar el arreglo array con datos de prueba
+    // Conjunto 1
+    array[0][0].x = 1;
+    array[0][0].y = 1;
+
+    array[0][1].x = 2;
+    array[0][1].y = 2;
+
+    array[0][2].x = 3;
+    array[0][2].y = 3;
+
+    array[0][3].x = 4;
+    array[0][3].y = 4;
+
+    // Conjunto 2
+    array[1][0].x = 5;
+    array[1][0].y = 5;
+
+    array[1][1].x = 6;
+    array[1][1].y = 6;
+
+    array[1][2].x = 7;
+    array[1][2].y = 7;
+
+    array[1][3].x = 8;
+    array[1][3].y = 8;
+
+    // Conjunto 3 (Repetido)
+    array[2][0].x = 1;
+    array[2][0].y = 1;
+
+    array[2][1].x = 2;
+    array[2][1].y = 2;
+
+    array[2][2].x = 3;
+    array[2][2].y = 3;
+
+    array[2][3].x = 4;
+    array[2][3].y = 4;
+
+    // Conjunto 4
+    array[3][0].x = 9;
+    array[3][0].y = 9;
+
+    array[3][1].x = 10;
+    array[3][1].y = 10;
+
+    array[3][2].x = 11;
+    array[3][2].y = 11;
+
+    array[3][3].x = 12;
+    array[3][3].y = 12;
+
+    // Rellenar el arreglo subCon con el subconjunto a buscar
+    Punto subCon[4];
+    subCon[0].x = 1;
+    subCon[0].y = 1;
+
+    subCon[1].x = 2;
+    subCon[1].y = 2;
+
+    subCon[2].x = 3;
+    subCon[2].y = 3;
+
+    subCon[3].x = 4;
+    subCon[3].y = 4;
+
+    int res = subConjuntoRepetido(array, n, subCon, 4);
+    printf("El subconjunto está repetido: %d\n", res );
+    // do
+    // {
+    //         JugadasJugador1[turno1] = *jugar(1, ptrTablero, 0);
+    //         turno1++;
+    //         imprimeJugadas(JugadasJugador1, turno1);
+    //         evaluaJugadas(JugadasJugador1, turno1, 1);
+
+    // } while ((turno1) != 5);
     /*     do
         {
             if((turno1 + turno2) % 2 == 0){
@@ -277,25 +358,21 @@ Punto *jugar(int valor, Matriz *tablero, int automatico){
     Punto *nuevoPunto = malloc(sizeof(Punto));
     printf("\nTurno jugador %d\n", valor);
     int x = 0, y = 0;
-    if (automatico == 1)
+
+    do
     {
-        //valores automaticos
-    }
-    else{
-        do
+        printf("Ingrese la fila: ");
+        scanf("%d", &x);
+
+        printf("Ingrese la columna: ");
+        scanf("%d", &y);
+
+        if (x > tablero->columna || y > tablero->columna)
         {
-            printf("Ingrese la fila: ");
-            scanf("%d", &x);
+            printf("Los valores ingresados deben ser menores o iguales 10. Por favor, inténtelo nuevamente.\n");
+        }
+    } while (x > tablero->columna || y > tablero->columna);
 
-            printf("Ingrese la columna: ");
-            scanf("%d", &y);
-
-            if (x > tablero->columna || y > tablero->columna)
-            {
-                printf("Los valores ingresados deben ser menores o iguales 10. Por favor, inténtelo nuevamente.\n");
-            }
-        } while (x > tablero->columna || y > tablero->columna);
-    }
 
     nuevoPunto->x = x;
     nuevoPunto->y = y;
@@ -314,4 +391,166 @@ void imprimeJugadas(Punto puntos[], int longitud){
     }
     printf("}");
     
+}
+
+int evaluaJugadas(Punto jugadas[], int longitud, int valor){
+    int i;
+    if (longitud < 4)
+    {
+        return 0;
+    }
+    else{
+        double cantidadCombinaciones = (factorial(longitud)) / ((factorial(longitud - 4) * factorial(4)));
+        printf("\nla cantidad de combinaciones es: %f\n", cantidadCombinaciones);
+        Punto **Combinaciones = malloc(cantidadCombinaciones * sizeof(Punto*));
+
+
+        for ( i = 0; i < cantidadCombinaciones; i++) {
+        printf("Combinacion %d: ", i + 1);
+        for (int j = 0; j < 4; j++) {
+            printf("(%d, %d) ", Combinaciones[i][j].x, Combinaciones[i][j].y);
+        }
+        printf("\n");
+    }
+        return 1;
+    }
+}
+
+long long int factorial(long long int valor){
+    printf("\nvalor: %lld", valor);
+    long long int f = 0;
+    if (valor == 0)
+    {
+
+        return 1;
+    }
+    else{
+        f = valor * factorial(valor - 1);
+        printf("\nf: %lld", f);
+        return f;
+    }
+}
+
+double calcularDistancia(Punto p1, Punto p2) {
+    double dx = p2.x - p1.x;
+    double dy = p2.y - p1.y;
+    return sqrt(dx * dx + dy * dy);
+}
+
+
+
+int combinatoria(int n, int k) {
+    if (k == 0 || k == n) {
+        return 1;
+    } else {
+        return combinatoria(n - 1, k - 1) + combinatoria(n - 1, k);
+    }
+}
+
+Punto **subConjuntos(Punto puntos[], int longitud, int cantidadElementosSubConjunto){
+
+    int i,j,k,l, encontrado;
+    int cantComb = combinatoria(longitud, cantidadElementosSubConjunto);
+    Punto **array = malloc(cantComb*sizeof(Punto *));
+    Punto conjuntoAux[cantidadElementosSubConjunto];
+    for (i = 0; i < cantComb; i++)
+    {
+        if(i == 0){
+            for ( j = 0; j < cantidadElementosSubConjunto; j++)
+            {
+                array[i][j].x = puntos[j].x;
+                array[i][j].y = puntos[j].y;
+            }
+        }
+        else{
+            while (array[i] == NULL)
+            {
+                for ( j = 0; j < i; j++)
+                {
+                    for ( k = 0; k < cantidadElementosSubConjunto; k++)
+                    {
+                        conjuntoAux[k].x = array[j]->x;
+                        conjuntoAux[k].y = array[j]->y;
+                    }
+                    
+                    for ( k = 0; k < cantidadElementosSubConjunto; k++)
+                    {
+                        for ( l = cantidadElementosSubConjunto; l < longitud; l++)
+                        {
+                            conjuntoAux[i].x = puntos[l].x;
+                            conjuntoAux[i].y = puntos[l].y;
+                            encontrado = subConjuntoRepetido(array, cantComb, conjuntoAux, cantidadElementosSubConjunto);
+                            if(encontrado == 1){
+                                break;
+                            }
+                        }
+
+                    }
+                    if(encontrado == 1){
+                        break;
+                    }
+                }
+                if(encontrado == 1){
+                    for ( j = 0; j < cantidadElementosSubConjunto; j++)
+                    {
+                        array[i][j].x = conjuntoAux[j].x;
+                        array[i][j].y = conjuntoAux[j].y;
+                    }
+                }
+
+            }
+        }
+    }
+
+    return array;
+}
+
+
+int subConjuntoRepetido(Punto **array, int longitud, Punto* subCon, int dimSubcon){
+    int i, k, j;
+    int existe[dimSubcon];
+    int existeCon = 1;
+
+    printf("Subconjunto: {");
+    for (i = 0; i < dimSubcon; i++)
+    {
+        if(i != 0){
+            printf(",");
+        }
+        existe[i] = 0;
+        printf("(%d,%d)", subCon[i].x, subCon[i].y);
+        
+    }
+    printf("}");
+
+    for (i = 0; i < longitud; i++)
+    {
+        for (j = 0; j < dimSubcon; j++)
+        {
+            for ( k = 0; k < dimSubcon; k++)
+            {
+                if (subCon[k].x == array[i][j].x && subCon[k].y == array[i][j].y)
+                {
+                    existe[k] = 1;
+                    break;
+                }
+            }
+        }
+        
+
+        for ( j = 0; j < dimSubcon; j++)
+        {
+            if(existe[j] != 1){
+                existeCon = 0;
+                break;
+            }
+        }
+
+        if(existeCon == 0){
+            break;
+        }
+        
+    }
+
+    return existeCon;
 }
