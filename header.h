@@ -37,6 +37,7 @@ void iniciaMatriz(Matriz *matriz);
 void leeConfiguracion(int *ancho, int *alto, char nick[]);
 void imprimeMatrizFormat(Matriz matriz);
 Matriz *inicializaMatriz(int filas, int columnas);
-// Punto *jugar(int valor, int fila, int col, int matriz[][col]);
+Punto *jugar(int valor, Matriz *tablero, int automatico);
+void imprimeJugadas(Punto puntos[], int longitud);
 
 Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[]);

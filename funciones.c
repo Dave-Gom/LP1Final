@@ -113,21 +113,34 @@ void verEstadisticas()
 void jugarPartida(char nick[])
 {
     int ancho = 0, alto = 0;
-    int turno = 0;
+    int turno1 = 0;
+    int turno2 = 0;
     int valor;
     int resultado = 0;
     leeConfiguracion(&ancho, &alto, nick);
     Matriz *ptrTablero = inicializaMatriz(alto, ancho);
     iniciaMatriz(ptrTablero);
     imprimeMatrizFormat(*ptrTablero);
+    Punto JugadasJugador1[(ancho * alto) / 2];
+    Punto JugadasJugador2[(ancho * alto) / 2];
 
-    do
-    {
-        if(turno % 2 == 0){
-            
-        }
-    } while (resultado == 0);
-    
+        do
+        {
+                JugadasJugador1[turno1] = *jugar(1, ptrTablero, 0);
+                turno1++;
+                imprimeJugadas(JugadasJugador1, turno1);
+        } while ((turno1) != 5);
+    /*     do
+        {
+            if((turno1 + turno2) % 2 == 0){
+
+                turno1++;
+            }
+            else{
+                printf("juega jugador 2 0 IA\n");
+                turno2++;
+            }
+        } while ((turno1 + turno2) != 25); */
 }
 
 void mostrarAyuda()
@@ -217,32 +230,7 @@ void iniciaMatriz(Matriz *ptrMatriz)
     }
 }
 
-void juegaUser(int fila, int columna, int matriz[fila][columna])
-{
-    int i, j;
 
-    do
-    {
-        printf("Ingrese la fila (0-%d): ", fila - 1);
-        scanf("%d", &i);
-        printf("Ingrese la columna (0-%d): ", columna - 1);
-        scanf("%d", &j);
-
-        if (i < 0 || i >= fila || j < 0 || j >= columna)
-        {
-            printf("Posición inválida. Intente nuevamente.\n");
-        }
-        else
-        {
-            if (matriz[i][j] != 0)
-            {
-                printf("Posición ocupada. Intente nuevamente.\n");
-            }
-        }
-    } while (i < 0 || i >= fila || j < 0 || j >= columna || matriz[i][j] != 0);
-
-    matriz[i][j] = 1;
-}
 
 
 /**
@@ -271,12 +259,6 @@ void imprimeMatrizFormat(Matriz matriz)
 }
 
 
-// Punto *jugar(int valor, int fila, int col, int matriz[][col]){
-//     Punto *nuevoPunto = malloc(sizeof(Punto));
-
-//     return nuevoPunto;
-// }
-
 Matriz *inicializaMatriz(int filas, int columnas){
     Matriz *ptrMatriz = malloc(sizeof(Matriz));
     int i;
@@ -289,4 +271,47 @@ Matriz *inicializaMatriz(int filas, int columnas){
     }
 
     return ptrMatriz;
+}
+
+Punto *jugar(int valor, Matriz *tablero, int automatico){
+    Punto *nuevoPunto = malloc(sizeof(Punto));
+    printf("\nTurno jugador %d\n", valor);
+    int x = 0, y = 0;
+    if (automatico == 1)
+    {
+        //valores automaticos
+    }
+    else{
+        do
+        {
+            printf("Ingrese la fila: ");
+            scanf("%d", &x);
+
+            printf("Ingrese la columna: ");
+            scanf("%d", &y);
+
+            if (x > tablero->columna || y > tablero->columna)
+            {
+                printf("Los valores ingresados deben ser menores o iguales 10. Por favor, inténtelo nuevamente.\n");
+            }
+        } while (x > tablero->columna || y > tablero->columna);
+    }
+
+    nuevoPunto->x = x;
+    nuevoPunto->y = y;
+    tablero->matriz[x][y] = valor;
+    imprimeMatrizFormat(*tablero);
+    return nuevoPunto;
+}
+
+
+void imprimeJugadas(Punto puntos[], int longitud){
+    int i = 0;
+    printf("{");
+    for (i = 0; i < longitud; i++)
+    {
+        printf("(%d , %d ) ,", puntos[i].x, puntos[i].y);
+    }
+    printf("}");
+    
 }
