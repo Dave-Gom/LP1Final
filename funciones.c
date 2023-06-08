@@ -279,6 +279,13 @@ Matriz *inicializaMatriz(int filas, int columnas){
     return ptrMatriz;
 }
 
+/*!
+ * @brief agrega una jugada al tablero
+ * @param valor 
+ * @param tablero 
+ * @param automatico 
+ * @return 
+ */
 Punto *jugar(int valor, Matriz *tablero, int automatico){
     Punto *nuevoPunto = malloc(sizeof(Punto));
     printf("\nTurno jugador %d\n", valor);
@@ -429,7 +436,14 @@ Punto **subConjuntos(Punto puntos[], int longitud, int cantidadElementosSubConju
 }
 
 
-//retorna 1 si el subconjunto existe en el array
+/*!
+ * @brief Determina si un subconjunto existe en un array de subconjuntos
+ * @param array 
+ * @param longitud 
+ * @param subCon 
+ * @param dimSubcon 
+ * @return 1 si el subconjunto existe en el array 0 en caso contrario
+ */
 int subConjuntoRepetido(Punto **array, int longitud, Punto* subCon, int dimSubcon){
     int i, k, j;
     int existe[dimSubcon];
@@ -470,5 +484,5 @@ int subConjuntoRepetido(Punto **array, int longitud, Punto* subCon, int dimSubco
         
     }
 
-    return existeCon == 0? 0: 1;
+    return existeCon;
 }
