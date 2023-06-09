@@ -115,38 +115,53 @@ void jugarPartida(char nick[])
     int ancho = 0, alto = 0;
     int turno1 = 0;
     int turno2 = 0;
-    int valor;
     int resultado = 0;
+    int bandera1 = 0, bandera2 = 0;
     leeConfiguracion(&ancho, &alto, nick);
     Matriz *ptrTablero = inicializaMatriz(alto, ancho);
     iniciaMatriz(ptrTablero);
     imprimeMatrizFormat(*ptrTablero);
     Punto JugadasJugador1[(ancho * alto) / 2];
     Punto JugadasJugador2[(ancho * alto) / 2];
-    int arr[] = {1, 2, 3, 4, 5, 6}; // Reemplaza 'a', 'b', 'c', 'd', 'e', 'f' por los valores reales
-    int n = sizeof(arr) / sizeof(arr[0]);
-
-
 
     do
     {
+        if((turno1 + turno2) % 2 == 0){
             JugadasJugador1[turno1] = *jugar(1, ptrTablero, 0);
             turno1++;
-            imprimeJugadas(JugadasJugador1, turno1);
-            evaluaJugadas(JugadasJugador1, turno1, 1);
-
-    } while ((turno1) != 5);
-    /*     do
-        {
-            if((turno1 + turno2) % 2 == 0){
-
-                turno1++;
+            bandera1= evaluaJugadas(JugadasJugador1, turno1);
+            if (bandera1 == 1)
+            {
+                break;
             }
-            else{
-                printf("juega jugador 2 0 IA\n");
-                turno2++;
+            
+        }
+        else{
+            JugadasJugador2[turno2] = *jugar(2, ptrTablero, 0);
+            turno2++;
+            bandera2= evaluaJugadas(JugadasJugador2, turno1);
+            if (bandera2 == 1)
+            {
+                break;
             }
-        } while ((turno1 + turno2) != 25); */
+        }
+    } while ((turno1) != (ancho*alto)/2 || (turno2) != (ancho*alto)/2);
+
+    if(bandera1 == bandera2){
+        printf("\n¡Empate!\n");
+    }
+    else 
+    {
+        if (bandera1 == 1){
+            printf("\n¡Gano el Jugador 1!\n");
+        }
+
+        if(bandera2 == 1){
+            printf("\n¡Gano el Jugador 2!\n");
+        }
+    }
+    
+    
 }
 
 void mostrarAyuda()
@@ -299,11 +314,18 @@ Punto *jugar(int valor, Matriz *tablero, int automatico){
         printf("Ingrese la columna: ");
         scanf("%d", &y);
 
-        if (x > tablero->columna || y > tablero->columna)
+        if (x > tablero->columna || y > tablero->fila || y < 0 || x<0)
         {
             printf("Los valores ingresados deben ser menores o iguales 10. Por favor, inténtelo nuevamente.\n");
+            continue;
         }
-    } while (x > tablero->columna || y > tablero->columna);
+
+        if(tablero->matriz[x][y] != 0){
+            printf("Casilla ocupada. Por favor, inténtelo nuevamente.\n");
+            continue;
+        }
+
+    } while (x > tablero->columna || y > tablero->fila ||  y < 0 || x<0 || tablero->matriz[x][y] != 0);
 
 
     nuevoPunto->x = x;
@@ -325,25 +347,36 @@ void imprimeJugadas(Punto puntos[], int longitud){
     
 }
 
-int evaluaJugadas(Punto jugadas[], int longitud, int valor){
+
+/*!
+ * @brief Evalua el array de jugadas
+ * @param jugadas 
+ * @param longitud 
+ * @return 1 si hay un cuadrado, 0 en caso contrario
+ */
+int evaluaJugadas(Punto jugadas[], int longitud){
     int i;
-    if (longitud < 4)
-    {
-        return 0;
-    }
-    else{
-        Punto **Combinaciones = subConjuntos(jugadas, longitud, 4);
-        for (i = 0; i < combinatoria(longitud, 4); i++)
-        {
-            printf("\nSubconjuntos %d: ", i + 1);
-            for (int j = 0; j < 4; j++)
-            {
-                printf("(%d, %d) ", Combinaciones[i][j].x, Combinaciones[i][j].y);
+    int bandera = 0;
+
+    if (longitud >= 4){
+        Punto** Combinaciones = malloc(combinatoria(longitud, 4) * sizeof(Punto*)); 
+        int cantidadCombinaciones = 0;
+        Punto combinacion[4];
+        almacenarCombinaciones(jugadas, longitud, 0, combinacion, 0, Combinaciones, &cantidadCombinaciones);
+
+        // Imprimir las combinaciones almacenadas
+        for (int i = 0; i < cantidadCombinaciones; i++) {
+            bandera = esCuadrado(Combinaciones[i], 4);
+            if(bandera == 1){
+                break;
             }
-            printf("\n");
         }
-        return 1;
+
+        liberarCombinaciones(Combinaciones, cantidadCombinaciones); // liberamos la memoria del array de combinaciones 
     }
+
+    return bandera;
+
 }
 
 
@@ -363,126 +396,119 @@ int combinatoria(int n, int k) {
     }
 }
 
-Punto **subConjuntos(Punto puntos[], int longitud, int cantidadElementosSubConjunto) {
-    int cantComb = combinatoria(longitud, cantidadElementosSubConjunto);
-    Punto **array = malloc(cantComb * sizeof(Punto *));
-    int repetido = 0, i, j, k, l;
-    int indiceSiguiente = 0;
-    if (array == NULL)
-    {
-        printf("Error: No se pudo asignar memoria.\n");
-        return NULL;
-    }
-
-    for (int i = 0; i < cantComb; i++) {
-        array[i] = malloc(cantidadElementosSubConjunto * sizeof(Punto));
-        if (array[i] == NULL) {
-            printf("Error: No se pudo asignar memoria.\n");
-            return NULL;
+void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, Punto combinacion[], int indiceCombinacion, Punto** Combinaciones, int* cantidadCombinaciones) {
+    if (indiceCombinacion == 4) {
+        // Se han seleccionado 4 jugadas, almacenar la combinación en Combinaciones
+        Punto* nuevaCombinacion = malloc(4 * sizeof(Punto));
+        for (int i = 0; i < 4; i++) {
+            nuevaCombinacion[i] = combinacion[i];
         }
+        Combinaciones[*cantidadCombinaciones] = nuevaCombinacion;
+        (*cantidadCombinaciones)++;
+        return;
     }
 
-    Punto conjuntoAux[cantidadElementosSubConjunto];
-    //para el primer elemento
-
-    for (j = 0; j < cantidadElementosSubConjunto; j++)
-    {
-        array[indiceSiguiente][j].x = puntos[j].x;
-        array[indiceSiguiente][j].y = puntos[j].y;
+    if (indiceActual >= cantJugadas) {
+        // No hay más jugadas disponibles, terminar la recursión
+        return;
     }
-    indiceSiguiente++;
 
-    for (i = cantidadElementosSubConjunto; i < longitud; i++)
-    {
+    // No seleccionar el punto actual y pasar al siguiente
+    almacenarCombinaciones(jugadas, cantJugadas, indiceActual + 1, combinacion, indiceCombinacion, Combinaciones, cantidadCombinaciones);
 
-        for ( j = 0; j < cantComb; j++)
-        {
+    // Seleccionar el punto actual y pasar al siguiente
+    combinacion[indiceCombinacion] = jugadas[indiceActual];
+    almacenarCombinaciones(jugadas, cantJugadas, indiceActual + 1, combinacion, indiceCombinacion + 1, Combinaciones, cantidadCombinaciones);
+}
 
-            for ( k = 0; k < cantidadElementosSubConjunto; k++) // copiamos el array 
-            {
-                printf("\n(%d,%d) -> ind: %d\n", array[j][k].x, array[j][k].y, j);
-                conjuntoAux[k].x = array[j][k].x;
-                conjuntoAux[k].y = array[j][k].y;
-            }
-
-            for ( k = 0; k < cantidadElementosSubConjunto; k++) 
-            {
-                conjuntoAux[k].x = puntos[i].x;
-                conjuntoAux[k].y = puntos[i].y;
-                repetido = subConjuntoRepetido(array, j, conjuntoAux, cantidadElementosSubConjunto);
-                if (repetido == 1)
-                {
-                    break;
-                }
-                conjuntoAux[k].x = array[j][k].x;
-                conjuntoAux[k].y = array[j][k].y;
-            }
-
-            if(repetido == 1){
-                for ( k = 0; k < cantidadElementosSubConjunto; k++)
-                {
-                    if(indiceSiguiente < cantComb){
-                        array[indiceSiguiente][k].x = conjuntoAux[k].x;
-                        array[indiceSiguiente][k].y = conjuntoAux[k].y;
-                    }
-                }
-                indiceSiguiente++;
-            }
-        }
-        
+void liberarCombinaciones(Punto** Combinaciones, int cantidadCombinaciones) {
+    for (int i = 0; i < cantidadCombinaciones; i++) {
+        free(Combinaciones[i]);
     }
-    
-    return array;
+    free(Combinaciones);
 }
 
 
 /*!
- * @brief Determina si un subconjunto existe en un array de subconjuntos
- * @param array 
- * @param longitud 
- * @param subCon 
- * @param dimSubcon 
- * @return 1 si el subconjunto existe en el array 0 en caso contrario
+ * @brief Verifica si un array de 4 puntos se corresponde o no con los vertices de un Cuadrado
+ * @param combinacion Array de Puntos (obligatoriamente de cuatro elementos)
+ * @return 1 si es afirmativo 0 si no
  */
-int subConjuntoRepetido(Punto **array, int longitud, Punto* subCon, int dimSubcon){
-    int i, k, j;
-    int existe[dimSubcon];
-    int existeCon = 1;
+int esCuadrado(Punto *combinacion, int longitudArray){
+    int i,j;
+    double bandera1, bandera2;
+    if(longitudArray == 4 ){
+        double distancias[6]; // 4C2 = 6
+        int index = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = i + 1; j < 4; j++) {
+                distancias[index] = calcularDistancia(combinacion[i], combinacion[j]);
+                index++;
+            }
+        }
 
-    for (i = 0; i < dimSubcon; i++)
-    {
-        existe[i] = 0; // al principio no podemos asegurar que los elementos de subconjunto existan en el array de subconjuntos
+        ordIntecambio(distancias, 6); // ordeno el array de menor a mayor
+
+        bandera1 = valoresIguales(distancias, 4) == 's'? distancias[0]: 0; // asignamos el valor 0 porque estamos evaluando distancias, y no puede se que la distancia entre dos puntos que no son el mismo sea 0
+        bandera2 = valoresIguales(&distancias[4], 2) == 's'? distancias[4]: 0;
+
+        if(bandera1 != 0 && bandera2 != 0 && bandera1<bandera2){
+            return 1;
+        }
+
     }
+    return 0;
 
-    for (i = 0; i < longitud; i++)
+}
+
+
+/**
+ * @brief Ordenamiento de intercambio. Ordena un array en orden ascendente por el metodo de intercambio de variables
+ *
+ * @param arreglo Arreglo a ser ordeneado
+ * @param longitud Dimension del arreglo
+ */
+void ordIntecambio(double arreglo[], int longitud)
+{
+    int i,   // iterador
+        j;  // iterador
+    double aux; // contenedor temporal del valor
+
+    for (i = 0; i < longitud - 1; i++) // inicia desde la primera posicion del arreglo hasta la posicion longitud -1
     {
-        for (j = 0; j < dimSubcon; j++)
+        for (j = i + 1; j < longitud; j++) // inicia desde la segunda posicion de arreglo hasta la ultima posicion
         {
-            for ( k = 0; k < dimSubcon; k++)
+            if (arreglo[i] > arreglo[j]) // si el arreglo de la segunda pisicon i > al de posicion j los intercambia
             {
-                if (subCon[k].x == array[i][j].x && subCon[k].y == array[i][j].y)
-                {
-                    existe[k] = 1; 
-                    break;
-                }
+                aux = arreglo[i];
+                arreglo[i] = arreglo[j];
+                arreglo[j] = aux;
             }
         }
-        
+    }
+}
 
-        for ( j = 0; j < dimSubcon; j++)
-        {
-            if(existe[j] != 1){ // si encontramos un solo caso para el todos estuvieron en el conjunto entonces el arral subconjunto no existe en el conjunto
-                existeCon = 0;
-                break;
-            }
+/*!
+ * @brief Evalua si todos los elementos de un array son iguales
+ * @param arreglo 
+ * @param longitud 
+ * @return 's' si todos son iguales 'n' en caso contrario
+ */
+char valoresIguales(double arreglo[], int longitud){
+    double contenedor;
+    int i;
+    char bandera = 's';
+    for ( i = 0; i < longitud; i++)
+    {
+        if(i == 0){
+            contenedor = arreglo[i];
         }
 
-        if(existeCon == 0){ // si encontramos el caso en que todos coinciden ya sabemos que el array no es unico, por lo tanto retornamos cero
-            printf("UNICO!|\n");
+        if(contenedor != arreglo[i]){
+            bandera = 'n';
             break;
         }
-        
     }
-
-    return existeCon;
+    
+    return bandera;
 }

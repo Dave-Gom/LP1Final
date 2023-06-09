@@ -40,9 +40,14 @@ void imprimeMatrizFormat(Matriz matriz);
 Matriz *inicializaMatriz(int filas, int columnas);
 Punto *jugar(int valor, Matriz *tablero, int automatico);
 void imprimeJugadas(Punto puntos[], int longitud);
-int evaluaJugadas(Punto jugadas[],int longitud, int valor);
+int evaluaJugadas(Punto jugadas[],int longitud);
 double calcularDistancia(Punto p1, Punto p2);
 int combinatoria(int n, int k);
-Punto **subConjuntos(Punto puntos[], int longitud, int cantidadElementosSubConjunto);
-int subConjuntoRepetido(Punto **array, int longitud, Punto* subCon, int dimSubcon);
+void liberarCombinaciones(Punto** Combinaciones, int cantidadCombinaciones);
+void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, Punto combinacion[], int indiceCombinacion, Punto** Combinaciones, int* cantidadCombinaciones);
+void liberarCombinaciones(Punto** Combinaciones, int cantidadCombinaciones);
+int esCuadrado(Punto *combinacion,  int longitudArray);
+void ordIntecambio(double arreglo[], int longitud);
+char valoresIguales(double arreglo[], int longitud);
+
 Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[]);
