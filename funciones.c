@@ -573,7 +573,6 @@ Punto *IA(Matriz tablero)
 
                 puntoAux.x = j;
                 puntoAux.y = i;
-                printf("analiz punto (%d,%d)", i, j);
                 for (k = 0; k < tablero.columna; k++)
                 {
                     for (l = 0; l < tablero.fila; l++)
@@ -584,8 +583,6 @@ Punto *IA(Matriz tablero)
                             distancia = abs(j - k);
                             if (distancia != 0)
                             {
-                                printf("Distancia !!!! : %d\n", distancia);
-
                                 jugadasPorDistancia = calcularMinimaCantidad(distancia, tablero, puntoAux, 2, &puntoContenedor);
 
                                 if (jugadasPorDistancia < cantidadJugadas)
@@ -604,7 +601,6 @@ Punto *IA(Matriz tablero)
                                 distancia = abs(l - i);
                                 if (distancia != 0)
                                 {
-                                    printf("Distancia ACa: %d\n", distancia);
                                     jugadasPorDistancia = calcularMinimaCantidad(distancia, tablero, puntoAux, 2, &puntoContenedor);
 
                                     if (jugadasPorDistancia < cantidadJugadas)
@@ -620,7 +616,7 @@ Punto *IA(Matriz tablero)
                         if (tablero.matriz[l][k] == 2 && (l != i) && abs(i - l) == abs(k - j))
                         { // verifica si se encuentra otro valor 2 en una posición diagonalmente opuesta al punto actual
                             distancia = abs(l - i);
-
+                            printf("Punto: (%d,%d)", distancia, l);
                             if (distancia != 0)
                             {
                                 jugadasPorDistancia = calcularMinimaCantidad(distancia, tablero, puntoAux, 2, &puntoContenedor);
@@ -700,7 +696,6 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
     }
 
     jugadas = ArribaDer(lado, tablero, ubicacion, valorAeval, &punto);
-    printf("ArribaDer: %d\n", jugadas);
     if (jugadas < maxJugadas)
     {
         maxJugadas = jugadas;
@@ -740,7 +735,6 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
         }
 
         jugadas = DiagonalArriba(lado, tablero, ubicacion, valorAeval, &punto);
-        printf("DiagonalArriba: %d\n", jugadas);
         if (jugadas < maxJugadas)
         {
             maxJugadas = jugadas;
@@ -749,7 +743,7 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
         }
 
         jugadas = DiagonalDer(lado, tablero, ubicacion, valorAeval, &punto);
-
+        printf("DiagonalDer: %d\n", jugadas);
         if (jugadas < maxJugadas)
         {
             maxJugadas = jugadas;
@@ -766,9 +760,6 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
             jugada->y = punto.y;
         }
     }
-
-    jugada->x = punto.x;
-    jugada->y = punto.y;
 
     return maxJugadas;
 }
@@ -1095,7 +1086,6 @@ int DiagonalAbajo(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Pun
 int DiagonalArriba(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
-    printf("lado :%d", lado);
     if (ubicacion.y - lado >= 0 && ubicacion.x + lado / 2 < tablero.columna && ubicacion.x - lado / 2 >= 0) // si se encuentra dentro de los limites del array
     {
 
@@ -1226,6 +1216,7 @@ int DiagonalIzq(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto
 int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
+    printf("Lado %d\n", lado);
     if (ubicacion.x + lado < tablero.columna && ubicacion.y + lado / 2 < tablero.fila && ubicacion.y - lado / 2 >= 0) // si se encuentra dentro de los limites de la matriz
     {
 
