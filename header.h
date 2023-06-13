@@ -49,5 +49,12 @@ void liberarCombinaciones(Punto** Combinaciones, int cantidadCombinaciones);
 int esCuadrado(Punto *combinacion,  int longitudArray);
 void ordIntecambio(double arreglo[], int longitud);
 char valoresIguales(double arreglo[], int longitud);
+Punto *IA(Matriz tablero);
+int enteroAleatorio(int limite);
+int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
+int ArribaIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
+int ArribaDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
+int abajoDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
+int AbajoIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
 
 Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[]);
