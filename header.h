@@ -56,5 +56,9 @@ int ArribaIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *j
 int ArribaDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
 int abajoDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
 int AbajoIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
+int DiagonalAbajo(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
+int DiagonalArriba(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
+int DiagonalIzq(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
+int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
 
 Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[]);
