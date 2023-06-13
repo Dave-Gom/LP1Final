@@ -1,6 +1,5 @@
 #include "header.h"
 
-
 /**
  * @brief funcion central del juego, despliega el menu y decide que funcion llamar atendiendo a la seleccion del usuario
  * @param nick
@@ -49,7 +48,6 @@ void inicia(char nick[])
         printf("\n");
     } while (opcion != 6);
 }
-
 
 /**
  * @brief Lee la configuracion de dimension del tablero
@@ -126,42 +124,44 @@ void jugarPartida(char nick[])
 
     do
     {
-        if((turno1 + turno2) % 2 == 0){
+        if ((turno1 + turno2) % 2 == 0)
+        {
             JugadasJugador1[turno1] = *jugar(1, ptrTablero, 0);
             turno1++;
-            bandera1= evaluaJugadas(JugadasJugador1, turno1);
+            bandera1 = evaluaJugadas(JugadasJugador1, turno1);
             if (bandera1 == 1)
             {
                 break;
             }
-            
         }
-        else{
+        else
+        {
             JugadasJugador2[turno2] = *jugar(2, ptrTablero, 1);
             turno2++;
-            bandera2= evaluaJugadas(JugadasJugador2, turno1);
+            bandera2 = evaluaJugadas(JugadasJugador2, turno1);
             if (bandera2 == 1)
             {
                 break;
             }
         }
-    } while ((turno1) != (ancho*alto)/2 || (turno2) != (ancho*alto)/2);
+    } while ((turno1) != (ancho * alto) / 2 || (turno2) != (ancho * alto) / 2);
 
-    if(bandera1 == bandera2){
+    if (bandera1 == bandera2)
+    {
         printf("\n¡Empate!\n");
     }
-    else 
+    else
     {
-        if (bandera1 == 1){
+        if (bandera1 == 1)
+        {
             printf("\n¡Gano el Jugador 1!\n");
         }
 
-        if(bandera2 == 1){
+        if (bandera2 == 1)
+        {
             printf("\n¡Gano el Jugador 2!\n");
         }
     }
-    
-    
 }
 
 void mostrarAyuda()
@@ -169,7 +169,6 @@ void mostrarAyuda()
     printf("Has seleccionado la opción: Ayuda.\n");
     // Agrega aquí el código para mostrar la ayuda
 }
-
 
 /**
  * @brief Abre o crea forzada un archivo dado su nombre y modo
@@ -251,9 +250,6 @@ void iniciaMatriz(Matriz *ptrMatriz)
     }
 }
 
-
-
-
 /**
  * @brief Imprimie una matriz formateada en forma de Table
  *
@@ -279,14 +275,14 @@ void imprimeMatrizFormat(Matriz matriz)
     printf("\n");
 }
 
-
-Matriz *inicializaMatriz(int filas, int columnas){
+Matriz *inicializaMatriz(int filas, int columnas)
+{
     Matriz *ptrMatriz = malloc(sizeof(Matriz));
     int i;
     ptrMatriz->fila = filas;
     ptrMatriz->columna = columnas;
     ptrMatriz->matriz = malloc(filas * sizeof(int *));
-    for ( i = 0; i < filas; i++)
+    for (i = 0; i < filas; i++)
     {
         ptrMatriz->matriz[i] = malloc(columnas * sizeof(int));
     }
@@ -296,19 +292,22 @@ Matriz *inicializaMatriz(int filas, int columnas){
 
 /*!
  * @brief agrega una jugada al tablero
- * @param valor 
- * @param tablero 
- * @param automatico 
- * @return 
+ * @param valor
+ * @param tablero
+ * @param automatico
+ * @return
  */
-Punto *jugar(int valor, Matriz *tablero, int automatico){
+Punto *jugar(int valor, Matriz *tablero, int automatico)
+{
     Punto *nuevoPunto = malloc(sizeof(Punto));
     printf("\nTurno jugador %d\n", valor);
     int x = 0, y = 0;
 
-    if(automatico == 0){
+    if (automatico == 0)
+    {
 
-        do {
+        do
+        {
             printf("fila: %d columna: %d\n", tablero->fila, tablero->columna);
 
             printf("Ingrese la fila: ");
@@ -317,14 +316,16 @@ Punto *jugar(int valor, Matriz *tablero, int automatico){
             printf("Ingrese la columna: ");
             scanf("%d", &x);
 
-            if (x >= tablero->columna || y >= tablero->fila || y < 0 || x < 0) {
+            if (x >= tablero->columna || y >= tablero->fila || y < 0 || x < 0)
+            {
                 printf("Los valores para la fila deben estar en [0 , %d].\nLos valores de la columna deben estar en [0,%d]\n", tablero->fila - 1, tablero->columna - 1);
                 printf("Fila %d, Columna: %d\n", tablero->fila, tablero->columna);
                 printf("Fila %d, Columna: %d\n", y, x);
                 continue;
             }
 
-            if (tablero->matriz[y][x] != 0) {
+            if (tablero->matriz[y][x] != 0)
+            {
                 printf("Casilla ocupada. Por favor, inténtelo nuevamente.\n");
                 continue;
             }
@@ -336,23 +337,22 @@ Punto *jugar(int valor, Matriz *tablero, int automatico){
         nuevoPunto->x = x;
         nuevoPunto->y = y;
     }
-    else{
+    else
+    {
         // do
         // {
-            nuevoPunto = IA(*tablero);
-            printf("Nuevo punto IA: %d,%d", nuevoPunto->x, nuevoPunto->y);
+        nuevoPunto = IA(*tablero);
+        printf("Nuevo punto IA: %d,%d", nuevoPunto->x, nuevoPunto->y);
         // } while (tablero->matriz[nuevoPunto->y][nuevoPunto->x] != 0);
     }
 
-    
     tablero->matriz[nuevoPunto->y][nuevoPunto->x] = valor;
     imprimeMatrizFormat(*tablero);
     return nuevoPunto;
-   
 }
 
-
-void imprimeJugadas(Punto puntos[], int longitud){
+void imprimeJugadas(Punto puntos[], int longitud)
+{
     int i = 0;
     printf("{");
     for (i = 0; i < longitud; i++)
@@ -360,63 +360,69 @@ void imprimeJugadas(Punto puntos[], int longitud){
         printf("(%d , %d ) ,", puntos[i].x, puntos[i].y);
     }
     printf("}");
-    
 }
-
 
 /*!
  * @brief Evalua el array de jugadas
- * @param jugadas 
- * @param longitud 
+ * @param jugadas
+ * @param longitud
  * @return 1 si hay un cuadrado, 0 en caso contrario
  */
-int evaluaJugadas(Punto jugadas[], int longitud){
+int evaluaJugadas(Punto jugadas[], int longitud)
+{
     int i;
     int bandera = 0;
 
-    if (longitud >= 4){
-        Punto** Combinaciones = malloc(combinatoria(longitud, 4) * sizeof(Punto*)); 
+    if (longitud >= 4)
+    {
+        Punto **Combinaciones = malloc(combinatoria(longitud, 4) * sizeof(Punto *));
         int cantidadCombinaciones = 0;
         Punto combinacion[4];
         almacenarCombinaciones(jugadas, longitud, 0, combinacion, 0, Combinaciones, &cantidadCombinaciones);
 
         // Imprimir las combinaciones almacenadas
-        for (int i = 0; i < cantidadCombinaciones; i++) {
+        for (int i = 0; i < cantidadCombinaciones; i++)
+        {
             bandera = esCuadrado(Combinaciones[i], 4);
-            if(bandera == 1){
+            if (bandera == 1)
+            {
                 break;
             }
         }
 
-        liberarCombinaciones(Combinaciones, cantidadCombinaciones); // liberamos la memoria del array de combinaciones 
+        liberarCombinaciones(Combinaciones, cantidadCombinaciones); // liberamos la memoria del array de combinaciones
     }
 
     return bandera;
-
 }
 
-
-double calcularDistancia(Punto p1, Punto p2) {
+double calcularDistancia(Punto p1, Punto p2)
+{
     double dx = p2.x - p1.x;
     double dy = p2.y - p1.y;
     return sqrt(dx * dx + dy * dy);
 }
 
-
-
-int combinatoria(int n, int k) {
-    if (k == 0 || k == n) {
+int combinatoria(int n, int k)
+{
+    if (k == 0 || k == n)
+    {
         return 1;
-    } else {
+    }
+    else
+    {
         return combinatoria(n - 1, k - 1) + combinatoria(n - 1, k);
     }
 }
 
-void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, Punto combinacion[], int indiceCombinacion, Punto** Combinaciones, int* cantidadCombinaciones) {
-    if (indiceCombinacion == 4) {
+void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, Punto combinacion[], int indiceCombinacion, Punto **Combinaciones, int *cantidadCombinaciones)
+{
+    if (indiceCombinacion == 4)
+    {
         // Se han seleccionado 4 jugadas, almacenar la combinación en Combinaciones
-        Punto* nuevaCombinacion = malloc(4 * sizeof(Punto));
-        for (int i = 0; i < 4; i++) {
+        Punto *nuevaCombinacion = malloc(4 * sizeof(Punto));
+        for (int i = 0; i < 4; i++)
+        {
             nuevaCombinacion[i] = combinacion[i];
         }
         Combinaciones[*cantidadCombinaciones] = nuevaCombinacion;
@@ -424,7 +430,8 @@ void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, 
         return;
     }
 
-    if (indiceActual >= cantJugadas) {
+    if (indiceActual >= cantJugadas)
+    {
         // No hay más jugadas disponibles, terminar la recursión
         return;
     }
@@ -437,27 +444,32 @@ void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, 
     almacenarCombinaciones(jugadas, cantJugadas, indiceActual + 1, combinacion, indiceCombinacion + 1, Combinaciones, cantidadCombinaciones);
 }
 
-void liberarCombinaciones(Punto** Combinaciones, int cantidadCombinaciones) {
-    for (int i = 0; i < cantidadCombinaciones; i++) {
+void liberarCombinaciones(Punto **Combinaciones, int cantidadCombinaciones)
+{
+    for (int i = 0; i < cantidadCombinaciones; i++)
+    {
         free(Combinaciones[i]);
     }
     free(Combinaciones);
 }
-
 
 /*!
  * @brief Verifica si un array de 4 puntos se corresponde o no con los vertices de un Cuadrado
  * @param combinacion Array de Puntos (obligatoriamente de cuatro elementos)
  * @return 1 si es afirmativo 0 si no
  */
-int esCuadrado(Punto *combinacion, int longitudArray){
-    int i,j;
+int esCuadrado(Punto *combinacion, int longitudArray)
+{
+    int i, j;
     double bandera1, bandera2;
-    if(longitudArray == 4 ){
+    if (longitudArray == 4)
+    {
         double distancias[6]; // 4C2 = 6
         int index = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = i + 1; j < 4; j++) {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = i + 1; j < 4; j++)
+            {
                 distancias[index] = calcularDistancia(combinacion[i], combinacion[j]);
                 index++;
             }
@@ -465,18 +477,16 @@ int esCuadrado(Punto *combinacion, int longitudArray){
 
         ordIntecambio(distancias, 6); // ordeno el array de menor a mayor
 
-        bandera1 = valoresIguales(distancias, 4) == 's'? distancias[0]: 0; // asignamos el valor 0 porque estamos evaluando distancias, y no puede se que la distancia entre dos puntos que no son el mismo sea 0
-        bandera2 = valoresIguales(&distancias[4], 2) == 's'? distancias[4]: 0;
+        bandera1 = valoresIguales(distancias, 4) == 's' ? distancias[0] : 0; // asignamos el valor 0 porque estamos evaluando distancias, y no puede se que la distancia entre dos puntos que no son el mismo sea 0
+        bandera2 = valoresIguales(&distancias[4], 2) == 's' ? distancias[4] : 0;
 
-        if(bandera1 != 0 && bandera2 != 0 && bandera1<bandera2){
+        if (bandera1 != 0 && bandera2 != 0 && bandera1 < bandera2)
+        {
             return 1;
         }
-
     }
     return 0;
-
 }
-
 
 /**
  * @brief Ordenamiento de intercambio. Ordena un array en orden ascendente por el metodo de intercambio de variables
@@ -486,8 +496,8 @@ int esCuadrado(Punto *combinacion, int longitudArray){
  */
 void ordIntecambio(double arreglo[], int longitud)
 {
-    int i,   // iterador
-        j;  // iterador
+    int i,      // iterador
+        j;      // iterador
     double aux; // contenedor temporal del valor
 
     for (i = 0; i < longitud - 1; i++) // inicia desde la primera posicion del arreglo hasta la posicion longitud -1
@@ -506,37 +516,40 @@ void ordIntecambio(double arreglo[], int longitud)
 
 /*!
  * @brief Evalua si todos los elementos de un array son iguales
- * @param arreglo 
- * @param longitud 
+ * @param arreglo
+ * @param longitud
  * @return 's' si todos son iguales 'n' en caso contrario
  */
-char valoresIguales(double arreglo[], int longitud){
+char valoresIguales(double arreglo[], int longitud)
+{
     double contenedor;
     int i;
     char bandera = 's';
-    for ( i = 0; i < longitud; i++)
+    for (i = 0; i < longitud; i++)
     {
-        if(i == 0){
+        if (i == 0)
+        {
             contenedor = arreglo[i];
         }
 
-        if(contenedor != arreglo[i]){
+        if (contenedor != arreglo[i])
+        {
             bandera = 'n';
             break;
         }
     }
-    
+
     return bandera;
 }
 
-
 /**
  * @brief Asigna en x e y las cordenadas de la mejor jugada posible de la IA
- * @param tablero 
- * @param x 
- * @param y 
+ * @param tablero
+ * @param x
+ * @param y
  */
-Punto *IA(Matriz tablero){
+Punto *IA(Matriz tablero)
+{
     Punto *Jugada = malloc(sizeof(Punto));
     Punto current, puntoAux, puntoContenedor, puntoContenedor2;
     int i, j, contador = 0, k, l;
@@ -546,58 +559,74 @@ Punto *IA(Matriz tablero){
 
     for (i = 0; i < tablero.fila; i++)
     {
-        for (j = 0; j < tablero.columna; j++) {
-            if (tablero.matriz[i][j] == 2) {
+        for (j = 0; j < tablero.columna; j++)
+        {
+            if (tablero.matriz[i][j] == 2)
+            {
                 contador++;
 
-                if (contador == 1) { // almacenamos la ubicacion del primer elemento en caso de que sea unico
+                if (contador == 1)
+                { // almacenamos la ubicacion del primer elemento en caso de que sea unico
                     puntoContenedor2.x = j;
                     puntoContenedor2.y = i;
                 }
 
-                for (k = 0; k < tablero.columna; k++) {
-                    for (l = 0; l < tablero.fila; l++) {
+                puntoAux.x = j;
+                puntoAux.y = i;
+                printf("analiz punto (%d,%d)", i, j);
+                for (k = 0; k < tablero.columna; k++)
+                {
+                    for (l = 0; l < tablero.fila; l++)
+                    {
 
-                        if (i != l || k != j) {
-
-                            if (tablero.matriz[i][k] == 2) { // si encontramos otro valor dos en la misma fila
-                                puntoAux.x = k;
-                                puntoAux.y = i;
-                                distancia = abs(i - l);
+                        if (tablero.matriz[i][k] == 2 && k != j)
+                        { // si encontramos otro valor dos en la misma fila
+                            distancia = abs(j - k);
+                            if (distancia != 0)
+                            {
+                                printf("Distancia !!!! : %d\n", distancia);
 
                                 jugadasPorDistancia = calcularMinimaCantidad(distancia, tablero, puntoAux, 2, &puntoContenedor);
 
-                                if (jugadasPorDistancia < cantidadJugadas) {
+                                if (jugadasPorDistancia < cantidadJugadas)
+                                {
                                     cantidadJugadas = jugadasPorDistancia;
                                     Jugada->x = puntoContenedor.x;
                                     Jugada->y = puntoContenedor.y;
                                 }
                             }
+                        }
 
-                            if (tablero.matriz[l][j] == 2) { // si encontramos otro valor dos en la misma columna
-                                if (l != i) { // Verifica que no sea el mismo punto
-                                    puntoAux.x = j;
-                                    puntoAux.y = l;
-                                    distancia = abs(l - i);
-
+                        if (tablero.matriz[l][j] == 2 && l != i)
+                        { // si encontramos otro valor dos en la misma columna
+                            if (l != i)
+                            { // Verifica que no sea el mismo punto
+                                distancia = abs(l - i);
+                                if (distancia != 0)
+                                {
+                                    printf("Distancia ACa: %d\n", distancia);
                                     jugadasPorDistancia = calcularMinimaCantidad(distancia, tablero, puntoAux, 2, &puntoContenedor);
 
-                                    if (jugadasPorDistancia < cantidadJugadas) {
+                                    if (jugadasPorDistancia < cantidadJugadas)
+                                    {
                                         cantidadJugadas = jugadasPorDistancia;
                                         Jugada->x = puntoContenedor.x;
                                         Jugada->y = puntoContenedor.y;
                                     }
                                 }
                             }
+                        }
 
-                            if (tablero.matriz[l][k] == 2 && abs(i - l) == abs(k - j)) { // verifica si se encuentra otro valor 2 en una posición diagonalmente opuesta al punto actual
-                                puntoAux.x = k;
-                                puntoAux.y = l;
-                                distancia = abs(l - i);
+                        if (tablero.matriz[l][k] == 2 && (l != i) && abs(i - l) == abs(k - j))
+                        { // verifica si se encuentra otro valor 2 en una posición diagonalmente opuesta al punto actual
+                            distancia = abs(l - i);
 
+                            if (distancia != 0)
+                            {
                                 jugadasPorDistancia = calcularMinimaCantidad(distancia, tablero, puntoAux, 2, &puntoContenedor);
 
-                                if (jugadasPorDistancia < cantidadJugadas) {
+                                if (jugadasPorDistancia < cantidadJugadas)
+                                {
                                     cantidadJugadas = jugadasPorDistancia;
                                     Jugada->x = puntoContenedor.x;
                                     Jugada->y = puntoContenedor.y;
@@ -622,7 +651,8 @@ Punto *IA(Matriz tablero){
         return Jugada;
     }
 
-    if (contador == 1 || cantidadJugadas >  3 || cantidadJugadas == 0) {
+    if (contador == 1 || cantidadJugadas >= 3 || cantidadJugadas == 0)
+    {
         int eleccion = enteroAleatorio(2);
 
         if (eleccion == 0)
@@ -633,15 +663,17 @@ Punto *IA(Matriz tablero){
             {
                 Jugada->x = enteroAleatorio(tablero.columna);
             } while (Jugada->x == puntoContenedor2.x || tablero.matriz[puntoContenedor2.y][Jugada->x] != 0);
-        } else { // Elegir un número en la misma columna que la jugada
+        }
+        else
+        { // Elegir un número en la misma columna que la jugada
             Jugada->x = puntoContenedor2.x;
 
-            do {
+            do
+            {
                 Jugada->y = enteroAleatorio(tablero.fila);
             } while (Jugada->y == puntoContenedor2.y || tablero.matriz[Jugada->y][puntoContenedor2.x] != 0);
         }
     }
-
 
     return Jugada;
 }
@@ -649,88 +681,87 @@ Punto *IA(Matriz tablero){
 int enteroAleatorio(int limite) // devuelve un numero entero positivo, negativo o cero aleatorio
 {
     int valor2 = (rand() % limite);
-    return  valor2;
+    return valor2;
 }
 
-
-int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada){
+int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
+{
     Punto punto;
     int maxJugadas = 3;
-    int jugadas1 = 3; // seteamos en tres porque ya sabemos que el punto actual es igual al valor a evaluar
-    int jugadas2 = 3, jugadas3 = 3, jugadas4 = 3;
-    // evaluaremos la posibilidad de formar cuatro cuadarados con el punto ubicacion y distancia
-    printf("ubicacion (%d,%d)\n", ubicacion.x, ubicacion.y);
+    int jugadas = 3; // seteamos en tres porque ya sabemos que el punto actual es igual al valor a evaluar
+    printf("Ubicacion: (%d,%d)\n", ubicacion.x, ubicacion.y);
 
-    jugadas1 = ArribaIz(lado, tablero, ubicacion, valorAeval, &punto);
-    printf("ArribaIz: %d\n", jugadas1);
-    if (jugadas1 < maxJugadas)
+    jugadas = ArribaIz(lado, tablero, ubicacion, valorAeval, &punto);
+    if (jugadas < maxJugadas)
     {
-        maxJugadas = jugadas1;
+        maxJugadas = jugadas;
         jugada->x = punto.x;
         jugada->y = punto.y;
     }
 
-    jugadas1 = ArribaDer(lado, tablero, ubicacion, valorAeval,&punto);
-    printf("ArribaDer: %d\n", jugadas1);
-    
-    if(jugadas1 < maxJugadas){
-        maxJugadas = jugadas1;
+    jugadas = ArribaDer(lado, tablero, ubicacion, valorAeval, &punto);
+    printf("ArribaDer: %d\n", jugadas);
+    if (jugadas < maxJugadas)
+    {
+        maxJugadas = jugadas;
         jugada->x = punto.x;
         jugada->y = punto.y;
     }
 
-    jugadas1 = abajoDer(lado, tablero, ubicacion, valorAeval,&punto);
-    printf("abajoDer: %d\n", jugadas1);
-    
-    if(jugadas1 < maxJugadas){
-        maxJugadas = jugadas1;
+    jugadas = abajoDer(lado, tablero, ubicacion, valorAeval, &punto);
+
+    if (jugadas < maxJugadas)
+    {
+        maxJugadas = jugadas;
         jugada->x = punto.x;
         jugada->y = punto.y;
     }
 
-    jugadas1 = AbajoIz(lado, tablero, ubicacion, valorAeval,&punto);
-    printf("AbajoIz: %d\n", jugadas1);
-    
-    if(jugadas1 < maxJugadas){
-        maxJugadas = jugadas1;
+    jugadas = AbajoIz(lado, tablero, ubicacion, valorAeval, &punto);
+
+    if (jugadas < maxJugadas)
+    {
+        maxJugadas = jugadas;
         jugada->x = punto.x;
         jugada->y = punto.y;
     }
 
-    if( lado % 2 == 0){
-        printf("\n\nEntro acaa (%d %% %d = %d\n\n", lado, 2 , lado % 2);
-        jugadas1 = DiagonalAbajo(lado, tablero, ubicacion, valorAeval, &punto);
-        printf("DiagonalAbajo: %d\n", jugadas1);
+    if (lado % 2 == 0)
+    {
+        printf("%d %% 2 = %d\n", lado, lado % 2);
 
-        if(jugadas1 < maxJugadas){
-            maxJugadas = jugadas1;
+        jugadas = DiagonalAbajo(lado, tablero, ubicacion, valorAeval, &punto);
+
+        if (jugadas < maxJugadas)
+        {
+            maxJugadas = jugadas;
             jugada->x = punto.x;
             jugada->y = punto.y;
         }
 
-        jugadas1 = DiagonalArriba(lado, tablero, ubicacion, valorAeval,&punto);
-        printf("DiagonalArriba: %d\n", jugadas1);
-        
-        if(jugadas1 < maxJugadas){
-            maxJugadas = jugadas1;
+        jugadas = DiagonalArriba(lado, tablero, ubicacion, valorAeval, &punto);
+        printf("DiagonalArriba: %d\n", jugadas);
+        if (jugadas < maxJugadas)
+        {
+            maxJugadas = jugadas;
             jugada->x = punto.x;
             jugada->y = punto.y;
         }
 
-        jugadas1 = DiagonalDer(lado, tablero, ubicacion, valorAeval,&punto);
-        printf("DiagonalDer: %d\n", jugadas1);
-        
-        if(jugadas1 < maxJugadas){
-            maxJugadas = jugadas1;
+        jugadas = DiagonalDer(lado, tablero, ubicacion, valorAeval, &punto);
+
+        if (jugadas < maxJugadas)
+        {
+            maxJugadas = jugadas;
             jugada->x = punto.x;
             jugada->y = punto.y;
         }
 
-        jugadas1 = DiagonalIzq(lado, tablero, ubicacion, valorAeval,&punto);
-        printf("DiagonalIzq: %d\n", jugadas1);
-        
-        if(jugadas1 < maxJugadas){
-            maxJugadas = jugadas1;
+        jugadas = DiagonalIzq(lado, tablero, ubicacion, valorAeval, &punto);
+
+        if (jugadas < maxJugadas)
+        {
+            maxJugadas = jugadas;
             jugada->x = punto.x;
             jugada->y = punto.y;
         }
@@ -742,46 +773,58 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
     return maxJugadas;
 }
 
-
-int ArribaIz(int lado,  Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada){
+int ArribaIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
+{
     int cantiJugadas = 3;
     if (ubicacion.x - lado >= 0 && ubicacion.y - lado >= 0)
     {
-        if(tablero.matriz[ubicacion.y - lado][ubicacion.x] == valorAeval){
+        if (tablero.matriz[ubicacion.y - lado][ubicacion.x] == valorAeval)
+        { // arriba mismo
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado][ubicacion.x] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y - lado][ubicacion.x] == 0)
+            {
                 jugada->x = ubicacion.x;
                 jugada->y = ubicacion.y - lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y - lado][ubicacion.x - lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y - lado][ubicacion.x - lado] == valorAeval)
+        { // diagonal superior izq
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado][ubicacion.x - lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y - lado][ubicacion.x - lado] == 0)
+            {
                 jugada->x = ubicacion.x - lado;
                 jugada->y = ubicacion.y - lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y][ubicacion.x - lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y][ubicacion.x - lado] == valorAeval)
+        { // a la izquierda
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y][ubicacion.x - lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y][ubicacion.x - lado] == 0)
+            {
                 jugada->x = ubicacion.x - lado;
                 jugada->y = ubicacion.y;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
@@ -792,366 +835,455 @@ int ArribaIz(int lado,  Matriz tablero, Punto ubicacion, int valorAeval, Punto *
     return 100;
 }
 
-int ArribaDer(int lado,  Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada){
+int ArribaDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
+{
     int cantiJugadas = 3;
 
     if (ubicacion.x + lado < tablero.columna && ubicacion.y - lado >= 0)
     {
-        if(tablero.matriz[ubicacion.y - lado][ubicacion.x] == valorAeval){
+        if (tablero.matriz[ubicacion.y - lado][ubicacion.x] == valorAeval) // arriba mismo
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado][ubicacion.x] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y - lado][ubicacion.x] == 0)
+            {
                 jugada->x = ubicacion.x;
                 jugada->y = ubicacion.y - lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y - lado][ubicacion.x + lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y - lado][ubicacion.x + lado] == valorAeval) // diagonal sup der
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado][ubicacion.x + lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y - lado][ubicacion.x + lado] == 0)
+            {
                 jugada->x = ubicacion.x + lado;
                 jugada->y = ubicacion.y - lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y][ubicacion.x + lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y][ubicacion.x + lado] == valorAeval) // a la derecha
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y][ubicacion.x + lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y][ubicacion.x + lado] == 0)
+            {
                 jugada->x = ubicacion.x + lado;
                 jugada->y = ubicacion.y;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
         return cantiJugadas;
     }
-    else{
+    else
+    {
         return 100;
     }
 }
 
-
-
-int abajoDer(int lado,  Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada){
+int abajoDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
+{
     int cantiJugadas = 3;
-    if (ubicacion.x + lado <tablero.columna && ubicacion.y + lado < tablero.fila)
+    if (ubicacion.x + lado < tablero.columna && ubicacion.y + lado < tablero.fila)
     {
-        if(tablero.matriz[ubicacion.y + lado][ubicacion.x] == valorAeval){
+        if (tablero.matriz[ubicacion.y + lado][ubicacion.x] == valorAeval) // abajo mismo
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y + lado][ubicacion.x] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y + lado][ubicacion.x] == 0)
+            {
                 jugada->x = ubicacion.x;
                 jugada->y = ubicacion.y + lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y + lado][ubicacion.x + lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y + lado][ubicacion.x + lado] == valorAeval) // diagonal inferior derecha
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado][ubicacion.x + lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y + lado][ubicacion.x + lado] == 0)
+            {
                 jugada->x = ubicacion.x + lado;
-                jugada->y = ubicacion.y - lado;
+                jugada->y = ubicacion.y + lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y][ubicacion.x + lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y][ubicacion.x + lado] == valorAeval) // a la derecha
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y][ubicacion.x + lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y][ubicacion.x + lado] == 0)
+            {
                 jugada->x = ubicacion.x + lado;
                 jugada->y = ubicacion.y;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
         return cantiJugadas;
     }
-    else{
+    else
+    {
         return 100;
     }
 }
 
-
-int AbajoIz(int lado,  Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada){
+int AbajoIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
+{
     int cantiJugadas = 3;
     if (ubicacion.x - lado >= 0 && ubicacion.y + lado < tablero.fila)
     {
-        if(tablero.matriz[ubicacion.y + lado][ubicacion.x] == valorAeval){
+        if (tablero.matriz[ubicacion.y + lado][ubicacion.x] == valorAeval) // abajo mismo
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y + lado][ubicacion.x] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y + lado][ubicacion.x] == 0)
+            {
                 jugada->x = ubicacion.x;
                 jugada->y = ubicacion.y + lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y + lado][ubicacion.x - lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y + lado][ubicacion.x - lado] == valorAeval) // diagonal inferior izq
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y + lado][ubicacion.x - lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y + lado][ubicacion.x - lado] == 0)
+            {
                 jugada->x = ubicacion.x - lado;
                 jugada->y = ubicacion.y + lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y][ubicacion.x - lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y][ubicacion.x - lado] == valorAeval) // a la izq
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y][ubicacion.x - lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y][ubicacion.x - lado] == 0)
+            {
                 jugada->x = ubicacion.x - lado;
                 jugada->y = ubicacion.y;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
-    
-        return cantiJugadas;
 
+        return cantiJugadas;
     }
 
     return 100;
 }
-
 
 int DiagonalAbajo(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
 
     int cantiJugadas = 3;
 
-    if (ubicacion.y + lado < tablero.fila && ubicacion.x + lado/2 <tablero.columna && ubicacion.x - lado/2 >= 0)
+    if (ubicacion.y + lado < tablero.fila && ubicacion.x + lado / 2 < tablero.columna && ubicacion.x - lado / 2 >= 0) // si se encuentra dentro de los limites de la matriz
     {
 
-        if(tablero.matriz[ubicacion.y + lado][ubicacion.x] == valorAeval){
+        if (tablero.matriz[ubicacion.y + lado][ubicacion.x] == valorAeval) // abajo mismo
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y + lado][ubicacion.x] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y + lado][ubicacion.x] == 0)
+            {
                 jugada->x = ubicacion.x;
                 jugada->y = ubicacion.y - lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y + lado/2][ubicacion.x + lado/2] == valorAeval){
+        if (tablero.matriz[ubicacion.y + lado / 2][ubicacion.x + lado / 2] == valorAeval) // diagonal inferior derecha
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y + lado/2][ubicacion.x + lado/2] == 0){
-                jugada->x = ubicacion.x + lado/2;
-                jugada->y = ubicacion.y + lado/2;
+        else
+        {
+            if (tablero.matriz[ubicacion.y + lado / 2][ubicacion.x + lado / 2] == 0)
+            {
+                jugada->x = ubicacion.x + lado / 2;
+                jugada->y = ubicacion.y + lado / 2;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y + lado/2][ubicacion.x - lado/2] == valorAeval){
+        if (tablero.matriz[ubicacion.y + lado / 2][ubicacion.x - lado / 2] == valorAeval) //  diagonal inferior izquierda
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y + lado/2][ubicacion.x - lado/2] == 0){
-                jugada->x = ubicacion.x - lado/2;
-                jugada->y = ubicacion.y + lado/2;
+        else
+        {
+            if (tablero.matriz[ubicacion.y + lado / 2][ubicacion.x - lado / 2] == 0)
+            {
+                jugada->x = ubicacion.x - lado / 2;
+                jugada->y = ubicacion.y + lado / 2;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
         return cantiJugadas;
     }
-    else{
+    else
+    {
         return 100;
     }
 }
 
-int DiagonalArriba(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada){
+int DiagonalArriba(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
+{
     int cantiJugadas = 3;
-    if (ubicacion.y - lado >=0 && ubicacion.x + lado/2 <tablero.columna && ubicacion.x - lado/2 >= 0)
+    printf("lado :%d", lado);
+    if (ubicacion.y - lado >= 0 && ubicacion.x + lado / 2 < tablero.columna && ubicacion.x - lado / 2 >= 0) // si se encuentra dentro de los limites del array
     {
 
-        if(tablero.matriz[ubicacion.y - lado][ubicacion.x] == valorAeval){
+        if (tablero.matriz[ubicacion.y - lado][ubicacion.x] == valorAeval) // arriba mismo
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado][ubicacion.x] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y - lado][ubicacion.x] == 0)
+            {
                 jugada->x = ubicacion.x;
                 jugada->y = ubicacion.y - lado;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y - lado/2][ubicacion.x + lado/2] == valorAeval){
+        if (tablero.matriz[ubicacion.y - lado / 2][ubicacion.x + lado / 2] == valorAeval) // diagonal sup der
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado/2][ubicacion.x + lado/2] == 0){
-                jugada->x = ubicacion.x + lado/2;
-                jugada->y = ubicacion.y - lado/2;
+        else
+        {
+            if (tablero.matriz[ubicacion.y - lado / 2][ubicacion.x + lado / 2] == 0)
+            {
+                jugada->x = ubicacion.x + lado / 2;
+                jugada->y = ubicacion.y - lado / 2;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y - lado/2][ubicacion.x - lado/2] == valorAeval){
+        if (tablero.matriz[ubicacion.y - lado / 2][ubicacion.x - lado / 2] == valorAeval) // diagonal sup izq
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado/2][ubicacion.x - lado/2] == 0){
-                jugada->x = ubicacion.x + lado/2;
+        else
+        {
+            if (tablero.matriz[ubicacion.y - lado / 2][ubicacion.x - lado / 2] == 0)
+            {
+                jugada->x = ubicacion.x + lado / 2;
                 jugada->y = ubicacion.y;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
         return cantiJugadas;
     }
-    else{
+    else
+    {
         return 100;
     }
 }
-
 
 int DiagonalIzq(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
-    if (ubicacion.x - lado >= 0 && ubicacion.y + lado/2 <tablero.columna && ubicacion.y - lado/2 >= 0)
+    if (ubicacion.x - lado >= 0 && ubicacion.y + lado / 2 < tablero.columna && ubicacion.y - lado / 2 >= 0) // si se encuentra dentro de los limites del array
     {
 
-        if(tablero.matriz[ubicacion.y][ubicacion.x - lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y][ubicacion.x - lado] == valorAeval) // a la izq
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y][ubicacion.x - lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y][ubicacion.x - lado] == 0)
+            {
                 jugada->x = ubicacion.x - lado;
                 jugada->y = ubicacion.y;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y - lado/2][ubicacion.x - lado/2] == valorAeval){
+        if (tablero.matriz[ubicacion.y - lado / 2][ubicacion.x - lado / 2] == valorAeval) // a la diagonal sup izq
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado/2][ubicacion.x - lado/2] == 0){
-                jugada->x = ubicacion.x - lado/2;
-                jugada->y = ubicacion.y - lado/2;
+        else
+        {
+            if (tablero.matriz[ubicacion.y - lado / 2][ubicacion.x - lado / 2] == 0)
+            {
+                jugada->x = ubicacion.x - lado / 2;
+                jugada->y = ubicacion.y - lado / 2;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y + lado/2][ubicacion.x - lado/2] == valorAeval){
+        if (tablero.matriz[ubicacion.y + lado / 2][ubicacion.x - lado / 2] == valorAeval) // diagonal inferior izq
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y + lado/2][ubicacion.x - lado/2] == 0){
-                jugada->x = ubicacion.x - lado/2;
-                jugada->y = ubicacion.y + lado/2;
+        else
+        {
+            if (tablero.matriz[ubicacion.y + lado / 2][ubicacion.x - lado / 2] == 0)
+            {
+                jugada->x = ubicacion.x - lado / 2;
+                jugada->y = ubicacion.y + lado / 2;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
         return cantiJugadas;
     }
-    else{
+    else
+    {
         return 100;
     }
 }
 
-
-int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada){
+int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
+{
     int cantiJugadas = 3;
-    if (ubicacion.x + lado <tablero.columna && ubicacion.y + lado/2 <tablero.fila && ubicacion.y - lado/2 >= 0)
+    if (ubicacion.x + lado < tablero.columna && ubicacion.y + lado / 2 < tablero.fila && ubicacion.y - lado / 2 >= 0) // si se encuentra dentro de los limites de la matriz
     {
 
-        if(tablero.matriz[ubicacion.y][ubicacion.x + lado] == valorAeval){
+        if (tablero.matriz[ubicacion.y][ubicacion.x + lado] == valorAeval) // a la derecha
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y][ubicacion.x + lado] == 0){
+        else
+        {
+            if (tablero.matriz[ubicacion.y][ubicacion.x + lado] == 0)
+            {
                 jugada->x = ubicacion.x + lado;
                 jugada->y = ubicacion.y;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y - lado/2][ubicacion.x + lado/2] == valorAeval){
+        if (tablero.matriz[ubicacion.y - lado / 2][ubicacion.x + lado / 2] == valorAeval) // diagonal sup derecha
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y - lado/2][ubicacion.x + lado/2] == 0){
-                jugada->x = ubicacion.x + lado/2;
-                jugada->y = ubicacion.y - lado/2;
+        else
+        {
+            if (tablero.matriz[ubicacion.y - lado / 2][ubicacion.x + lado / 2] == 0)
+            {
+                jugada->x = ubicacion.x + lado / 2;
+                jugada->y = ubicacion.y - lado / 2;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
-        if(tablero.matriz[ubicacion.y + lado/2][ubicacion.x + lado/2] == valorAeval){
+        if (tablero.matriz[ubicacion.y + lado / 2][ubicacion.x + lado / 2] == valorAeval) // diagonal inf derecha
+        {
             cantiJugadas--;
         }
-        else{
-            if(tablero.matriz[ubicacion.y + lado/2][ubicacion.x + lado/2] == 0){
-                jugada->x = ubicacion.x + lado/2;
-                jugada->y = ubicacion.y + lado/2;
+        else
+        {
+            if (tablero.matriz[ubicacion.y + lado / 2][ubicacion.x + lado / 2] == 0)
+            {
+                jugada->x = ubicacion.x + lado / 2;
+                jugada->y = ubicacion.y + lado / 2;
             }
-            else{
+            else
+            {
                 return 100;
             }
         }
 
         return cantiJugadas;
     }
-    else{
+    else
+    {
         return 100;
     }
 }

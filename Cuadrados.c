@@ -6,7 +6,5 @@ int main()
     printf("Ingresa tu nickname para comenzar el juego: ");
     scanf("%s", nickname);
     inicia(nickname);
-
     return 0;
 }
-
