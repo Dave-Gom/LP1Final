@@ -146,7 +146,7 @@ void jugarPartida(char nick[])
         }
     } while ((turno1) != (ancho * alto) / 2 || (turno2) != (ancho * alto) / 2);
 
-    if (bandera1 == bandera2)
+    if (bandera1 == bandera2 == 0)
     {
         printf("\n¡Empate!\n");
     }
@@ -339,11 +339,8 @@ Punto *jugar(int valor, Matriz *tablero, int automatico)
     }
     else
     {
-        // do
-        // {
         nuevoPunto = IA(*tablero);
-        printf("Nuevo punto IA: %d,%d", nuevoPunto->x, nuevoPunto->y);
-        // } while (tablero->matriz[nuevoPunto->y][nuevoPunto->x] != 0);
+        printf("Jugador 2: (%d,%d)", nuevoPunto->x, nuevoPunto->y);
     }
 
     tablero->matriz[nuevoPunto->y][nuevoPunto->x] = valor;
@@ -616,7 +613,6 @@ Punto *IA(Matriz tablero)
                         if (tablero.matriz[l][k] == 2 && (l != i) && abs(i - l) == abs(k - j))
                         { // verifica si se encuentra otro valor 2 en una posición diagonalmente opuesta al punto actual
                             distancia = abs(l - i);
-                            printf("Punto: (%d,%d)", distancia, l);
                             if (distancia != 0)
                             {
                                 jugadasPorDistancia = calcularMinimaCantidad(distancia, tablero, puntoAux, 2, &puntoContenedor);
@@ -685,7 +681,6 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
     Punto punto;
     int maxJugadas = 3;
     int jugadas = 3; // seteamos en tres porque ya sabemos que el punto actual es igual al valor a evaluar
-    printf("Ubicacion: (%d,%d)\n", ubicacion.x, ubicacion.y);
 
     jugadas = ArribaIz(lado, tablero, ubicacion, valorAeval, &punto);
     if (jugadas < maxJugadas)
@@ -723,7 +718,6 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
 
     if (lado % 2 == 0)
     {
-        printf("%d %% 2 = %d\n", lado, lado % 2);
 
         jugadas = DiagonalAbajo(lado, tablero, ubicacion, valorAeval, &punto);
 
@@ -743,7 +737,6 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
         }
 
         jugadas = DiagonalDer(lado, tablero, ubicacion, valorAeval, &punto);
-        printf("DiagonalDer: %d\n", jugadas);
         if (jugadas < maxJugadas)
         {
             maxJugadas = jugadas;
@@ -1216,7 +1209,6 @@ int DiagonalIzq(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto
 int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
-    printf("Lado %d\n", lado);
     if (ubicacion.x + lado < tablero.columna && ubicacion.y + lado / 2 < tablero.fila && ubicacion.y - lado / 2 >= 0) // si se encuentra dentro de los limites de la matriz
     {
 
