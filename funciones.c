@@ -146,7 +146,7 @@ void jugarPartida(char nick[])
         }
     } while ((turno1) != (ancho * alto) / 2 || (turno2) != (ancho * alto) / 2);
 
-    if (bandera1 == bandera2 == 0)
+    if (bandera1 == bandera2 && bandera1 == 0 && bandera2 == 0)
     {
         printf("\n¡Empate!\n");
     }
@@ -339,7 +339,11 @@ Punto *jugar(int valor, Matriz *tablero, int automatico)
     }
     else
     {
-        nuevoPunto = IA(*tablero);
+        do
+        {
+            nuevoPunto = IA(*tablero);
+        } while (tablero->matriz[nuevoPunto->y][nuevoPunto->x] != 0);
+
         printf("Jugador 2: (%d,%d)", nuevoPunto->x, nuevoPunto->y);
     }
 
