@@ -37,10 +37,16 @@ typedef struct JUGADOR
     int partidasEmpatadas;
 } Jugador;
 
+typedef struct REGISTRO
+{
+    char nick[100];
+    int puntaje;
+} RegistroRanking;
+
 void inicia(char nick[]);
 void visualizarConfiguracion(char nick[]);
 void configurarParametros(char nick[]);
-void verEstadisticas();
+void verEstadisticas(char nick[]);
 void jugarPartida(char nick[]);
 void mostrarAyuda();
 void iniciaMatriz(Matriz *matriz);
@@ -72,5 +78,8 @@ int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto
 void guardarPartida(char nick[], int resultado, int cantidadJugadas);
 Jugador *leeResultados(char NombreArchivo[]);
 void guardarResultados(char nombreArchivo[], Jugador jugador);
+void guardarEnRanking(char nombre[], int puntaje);
+void leerRanking(RegistroRanking ranking[], int dimencion);
+void ordIntecambioRegistosRanking(RegistroRanking arreglo[], int longitud);
 
 Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[]);

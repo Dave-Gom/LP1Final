@@ -30,7 +30,7 @@ void inicia(char nick[])
             configurarParametros(nick);
             break;
         case 3:
-            verEstadisticas();
+            verEstadisticas(nick);
             break;
         case 4:
             jugarPartida(nick);
@@ -102,10 +102,38 @@ void configurarParametros(char nick[])
     // Agrega aquí el código para configurar los parámetros
 }
 
-void verEstadisticas()
+void verEstadisticas(char nick[])
 {
-    printf("Has seleccionado la opción: Ver estadísticas.\n");
-    // Agrega aquí el código para ver las estadísticas
+    printf("\nEstadisticas\n\nJugador: %s\n", nick);
+    RegistroRanking rankingActual[5];
+    char nombreArchivo[100] = "";
+    int i;
+    double relacion1 = 0, relacion2 = 0, relacion3 = 0;
+    strcat(nombreArchivo, nick);
+    strcat(nombreArchivo, "_resultados.txt");
+    Jugador *datosJugador = leeResultados(nombreArchivo);
+
+    leerRanking(rankingActual, 5);
+
+    if (datosJugador->partidasJugadas != 0)
+    {
+        relacion1 = ((double)datosJugador->partidasGanadas / datosJugador->partidasJugadas);
+        relacion2 = ((double)datosJugador->partidasEmpatadas / datosJugador->partidasJugadas);
+        relacion3 = ((double)datosJugador->partidasPeridas / datosJugador->partidasJugadas);
+    }
+
+    printf("\nPartidas ganadas: %d%%\n", (int)(relacion1 * 100));
+    printf("Partidas empatadas: %d%%\n", (int)(relacion2 * 100));
+    printf("Partidas perdidas: %d%%\n", (int)(relacion3 * 100));
+
+    printf("\nRanking Mejores puntajes\n\n");
+    for (i = 0; i < 5; i++)
+    {
+        if (strlen(rankingActual[i].nick) != 0)
+        {
+            printf("#%d %s\t%d pts.\n", i + 1, rankingActual[i].nick, rankingActual[i].puntaje);
+        }
+    }
 }
 
 void jugarPartida(char nick[])
@@ -157,12 +185,13 @@ void jugarPartida(char nick[])
         {
             printf("\n¡Gano el Jugador 1!\n");
             guardarPartida(nick, 1, turno1);
+            guardarEnRanking(nick, turno1);
         }
 
         if (bandera2 == 1)
         {
             printf("\n¡Gano el Jugador 2!\n");
-            guardarPartida(nick, 2, turno1);
+            guardarPartida(nick, 2, turno2);
         }
     }
 }
@@ -203,7 +232,6 @@ void mostrarAyuda()
 Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[])
 {
     Archivo *ptrNuevoArchivo = malloc(sizeof(Archivo)); // inicializa el puntero al archivo en null
-    char generico[100];
     if ((ptrNuevoArchivo->punteroArchivo = fopen(nombreArchivo, modo)) == NULL)
     {
         if ((ptrNuevoArchivo->punteroArchivo = fopen(nombreArchivo, "w+")) != NULL)
@@ -1339,20 +1367,15 @@ Jugador *leeResultados(char nombreArchivo[])
     char empatadas[100] = "";
     int g = 0, e = 0, p = 0;
     Jugador *datosJugador = malloc(sizeof(Jugador));
-
     if (configuracion != NULL && !feof(configuracion->punteroArchivo))
     {
-        fscanf(configuracion->punteroArchivo, "%s", datosJugador->nick);
-        fscanf(configuracion->punteroArchivo, "%s", ganadas);
-        fscanf(configuracion->punteroArchivo, "%s", ganadas);
         fscanf(configuracion->punteroArchivo, "%s", ganadas);
         fscanf(configuracion->punteroArchivo, "%s", perdidas);
         fscanf(configuracion->punteroArchivo, "%s", empatadas);
-        sscanf(ganadas, "Partidas ganadas=%d", &g);
-        sscanf(ganadas, "Partidas perdidas=%d", &p);
-        sscanf(ganadas, "Partidas empatadas=%d", &e);
+        sscanf(ganadas, "Ganadas=%d", &g);
+        sscanf(perdidas, "Perdidas=%d", &p);
+        sscanf(empatadas, "Empatadas=%d", &e);
     }
-
     datosJugador->partidasGanadas = g;
     datosJugador->partidasPeridas = e;
     datosJugador->partidasEmpatadas = p;
@@ -1368,10 +1391,84 @@ void guardarResultados(char nombreArchivo[], Jugador jugador)
     Archivo *configuracion = abreArchivoGenerico(nombreArchivo, "w");
     if (configuracion != NULL)
     {
-        fprintf(configuracion->punteroArchivo, "Partidas ganadas=%d\n", jugador.partidasGanadas);
-        fprintf(configuracion->punteroArchivo, "Partidas perdidas=%d\n", jugador.partidasPeridas);
-        fprintf(configuracion->punteroArchivo, "Partidas empatadas=%d\n", jugador.partidasEmpatadas);
+        fprintf(configuracion->punteroArchivo, "Ganadas=%d\n", jugador.partidasGanadas);
+        fprintf(configuracion->punteroArchivo, "Perdidas=%d\n", jugador.partidasPeridas);
+        fprintf(configuracion->punteroArchivo, "Empatadas=%d\n", jugador.partidasEmpatadas);
     }
     fclose(configuracion->punteroArchivo);
     free(configuracion);
+}
+
+void leerRanking(RegistroRanking ranking[], int dimension)
+{
+    Archivo *archivoRanking = abreArchivoGenerico("ranking.txt", "rb");
+    RegistroRanking registroAux = {"", 0};
+    int indice = 0;
+    while (indice < dimension && !feof(archivoRanking->punteroArchivo))
+    {
+        fseek(archivoRanking->punteroArchivo, indice * sizeof(RegistroRanking), SEEK_SET); // establece el apuntador a la posicion del numero de cuenta del nuevo Registro
+        fread(&registroAux, sizeof(RegistroRanking), 1, archivoRanking->punteroArchivo);
+        strcpy(ranking[indice].nick, registroAux.nick);
+        ranking[indice].puntaje = registroAux.puntaje;
+        indice++;
+        strcpy(registroAux.nick, "");
+        registroAux.puntaje = 0;
+    }
+    fclose(archivoRanking->punteroArchivo);
+    free(archivoRanking);
+}
+
+void guardarEnRanking(char nombre[], int jugadas)
+{
+    int puntaje = 1000 * ((double)4 / jugadas);
+    RegistroRanking rankingActual[6];
+    leerRanking(rankingActual, 5);
+
+    strcpy(rankingActual[5].nick, nombre);
+    rankingActual[5].puntaje = puntaje;
+    ordIntecambioRegistosRanking(rankingActual, 6);
+
+    Archivo *archivoRanking = abreArchivoGenerico("ranking.txt", "rb+"); // guardamos el ranking en un archivo binario para que este no se pueda modificar
+    int indice = 0;
+
+    while (indice < 5 && !feof(archivoRanking->punteroArchivo))
+    {
+        fseek(archivoRanking->punteroArchivo, indice * sizeof(RegistroRanking), SEEK_SET);
+        fwrite(&(rankingActual[indice]), sizeof(RegistroRanking), 1, archivoRanking->punteroArchivo);
+        rewind(archivoRanking->punteroArchivo);
+        indice++;
+    }
+
+    fclose(archivoRanking->punteroArchivo);
+    free(archivoRanking);
+}
+
+/**
+ * @brief Ordenamiento de intercambio. Ordena un array en orden ascendente por el metodo de intercambio de variables
+ *
+ * @param arreglo Arreglo a ser ordeneado
+ * @param longitud Dimension del arreglo
+ */
+void ordIntecambioRegistosRanking(RegistroRanking arreglo[], int longitud)
+{
+    int i, // iterador
+        j; // iterador
+
+    RegistroRanking aux; // contenedor temporal del valor
+
+    for (i = 0; i < longitud - 1; i++) // inicia desde la primera posicion del arreglo hasta la posicion longitud -1
+    {
+        for (j = i + 1; j < longitud; j++) // inicia desde la segunda posicion de arreglo hasta la ultima posicion
+        {
+            if (arreglo[i].puntaje < arreglo[j].puntaje) // si el arreglo de la segunda pisicon i > al de posicion j los intercambia
+            {
+                aux.puntaje = arreglo[i].puntaje;
+                strcpy(aux.nick, arreglo[i].nick);
+                arreglo[i].puntaje = arreglo[j].puntaje;
+                strcpy(arreglo[i].nick, arreglo[j].nick);
+                arreglo[j].puntaje = aux.puntaje;
+                strcpy(arreglo[j].nick, aux.nick);
+            }
+        }
+    }
 }
