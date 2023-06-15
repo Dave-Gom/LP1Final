@@ -110,7 +110,7 @@ void verEstadisticas()
 
 void jugarPartida(char nick[])
 {
-    int ancho = 0, alto = 0;
+    int ancho = 5, alto = 5; //
     int turno1 = 0;
     int turno2 = 0;
     int resultado = 0;
@@ -166,8 +166,26 @@ void jugarPartida(char nick[])
 
 void mostrarAyuda()
 {
-    printf("Has seleccionado la opción: Ayuda.\n");
-    // Agrega aquí el código para mostrar la ayuda
+
+    printf("\n\n¡Bienvenido al juego interactivo de formar cuadrados!\n\n");
+    printf("Aquí encontrarás todas las instrucciones necesarias para disfrutar de esta emocionante experiencia y algunos consejos para tener éxito en tus partidas.\n\n");
+    printf("El objetivo del juego es determinar cuadrados a partir de sus vértices y ganar la partida antes que tu oponente, para esta compilacion, la computadora.\n\n");
+    printf("Al comenzar, se te pedirá que ingreses tu nick o nombre de usuario para identificarte. Luego, se desplegará un menú con diferentes opciones:\n\n");
+    printf("\t1. Visualizar configuración del tablero: Esta opción te permitirá conocer la información sobre el tamaño actual del tablero, es decir, el número de casillas que conforman el tablero en filas y columnas.\n");
+    printf("\t2. Configurar parámetros: Aquí podrás ajustar la configuración del tablero, cambiando su tamaño para las partidas posteriores. Recuerda que el tamaño máximo del tablero es de 10x10 casillas.\n");
+    printf("\t3. Ver estadísticas: En esta sección podrás consultar tus estadísticas como jugador. Se mostrará el porcentaje de partidas ganadas, perdidas y empatadas, así como la cantidad total de jugadas realizadas. Además, podrás ver el puntaje de los 5 mejores jugadores hasta el momento.\n");
+    printf("\t4. Jugar partida: ¡Es hora de poner a prueba tus habilidades! Al seleccionar esta opción, se desplegará el tablero de juego en pantalla. El tablero consta de una cuadrícula de casillas, representadas por filas y columnas, donde podrás colocar tus fichas para formar cuadrados. El juego se desarrollará por turnos, comenzando por ti y luego la computadora o el otro jugador. \n\tCada turno consistirá en elegir una casilla disponible para colocar una ficha. Recuerda que las fichas se representan con el valor 1 para tus movimientos y el valor 2 para los movimientos del oponente. Para formar un cuadrado, deberás seleccionar cuatro casillas consecutivas que representan los vértices del cuadrado en cualquier dirección: horizontal, vertical o diagonal. \n\tPuedes formar cuadrados de cualquier tamaño y en cualquier posición dentro del tablero. ¡La creatividad y la estrategia son clave!\n");
+    printf("\tTips para ganar el juego:\n");
+    printf("\t\ta) Observa el tablero: Antes de realizar tu movimiento, analiza el estado actual del tablero. Identifica posibles combinaciones de casillas que podrían formar un cuadrado en tu próximo turno y también considera las jugadas del oponente.\n");
+    printf("\t\tb) Bloquea al oponente: Si notas que el oponente está cerca de formar un cuadrado, intenta bloquear sus movimientos colocando tus fichas estratégicamente en las casillas que necesita para completar su cuadrado. Esto puede darle una ventaja a tu juego.\n");
+    printf("\t\tc) Diversifica tus movimientos: No te limites a una sola dirección o estrategia. Explora diferentes posibilidades y coloca tus fichas en diversas partes del tablero. Esto puede dificultar la tarea del oponente para predecir tus movimientos y evitar que formes cuadrados.\n");
+    printf("\t\td) Piensa a futuro: Considera no solo el movimiento actual, sino también las posibles jugadas futuras. Intenta anticiparte a los movimientos del oponente y planifica tu estrategia en consecuencia. Visualiza cómo podrías formar cuadrados en los próximos turnos y actúa en consecuencia.\n");
+    printf("\t\te) Mantén el control del centro: El centro del tablero es una posición estratégica, ya que te brinda más oportunidades para formar cuadrados en diferentes direcciones. Intenta mantener el control de estas casillas y dificulta el acceso del oponente a ellas.\n\n");
+    printf("Recuerda que la práctica y la experiencia son clave para mejorar tu desempeño en el juego. ¡Diviértete, experimenta con diferentes estrategias y disfruta de la emoción de formar cuadrados ganadores!\n\n");
+    printf("\t5. Ayuda: Aquí encontrarás información adicional sobre el funcionamiento del juego y las reglas básicas. Podrás consultar detalles sobre cómo determinar cuadrados a partir de los vértices y cómo se lleva a cabo la partida. Además, si tienes alguna duda específica, estaremos encantados de ayudarte.\n");
+    printf("\t6. Salir: Si deseas finalizar el juego, selecciona esta opción para salir del programa.\n\n");
+    printf("Recuerda que el juego continuará hasta que uno de los jugadores haya conseguido formar un cuadrado o hasta que el tablero se llene sin que ninguno lo haya logrado. Después de cada partida, los resultados se guardarán en el archivo \"resultados.txt\" para que puedas consultar tus estadísticas en futuras partidas.\n\n");
+    printf("¡Diviértete jugando y que tengas mucho éxito en tus estrategias para formar cuadrados!\n");
 }
 
 /**
@@ -212,7 +230,7 @@ Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[])
  */
 void leeConfiguracion(int *ancho, int *alto, char nick[])
 {
-    int primerValor, segundoValor;
+    int primerValor = 0, segundoValor = 0;
     char anchoChar[20] = "", altoChar[20] = "";
     char nombreArchivo[100] = "";
     strcat(nombreArchivo, nick);
@@ -224,6 +242,14 @@ void leeConfiguracion(int *ancho, int *alto, char nick[])
         fscanf(ptrConfiguracion->punteroArchivo, "%s", altoChar);
         sscanf(anchoChar, "Ancho=%d", &primerValor);
         sscanf(altoChar, "Alto=%d", &segundoValor);
+    }
+    if (primerValor == 0)
+    {
+        primerValor = 10;
+    }
+    if (segundoValor == 0) // en caso de que no se encentre configurado el tablero, la dimension por defecto es 10x10
+    {
+        segundoValor = 10;
     }
 
     *ancho = primerValor;
