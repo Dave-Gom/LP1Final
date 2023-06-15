@@ -28,6 +28,15 @@ typedef struct JUGADAS
     int cantidadJugadas;
 } Jugadas;
 
+typedef struct JUGADOR
+{
+    char nick[100];
+    int partidasJugadas;
+    int partidasGanadas;
+    int partidasPeridas;
+    int partidasEmpatadas;
+} Jugador;
+
 void inicia(char nick[]);
 void visualizarConfiguracion(char nick[]);
 void configurarParametros(char nick[]);
@@ -40,13 +49,13 @@ void imprimeMatrizFormat(Matriz matriz);
 Matriz *inicializaMatriz(int filas, int columnas);
 Punto *jugar(int valor, Matriz *tablero, int automatico);
 void imprimeJugadas(Punto puntos[], int longitud);
-int evaluaJugadas(Punto jugadas[],int longitud);
+int evaluaJugadas(Punto jugadas[], int longitud);
 double calcularDistancia(Punto p1, Punto p2);
 int combinatoria(int n, int k);
-void liberarCombinaciones(Punto** Combinaciones, int cantidadCombinaciones);
-void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, Punto combinacion[], int indiceCombinacion, Punto** Combinaciones, int* cantidadCombinaciones);
-void liberarCombinaciones(Punto** Combinaciones, int cantidadCombinaciones);
-int esCuadrado(Punto *combinacion,  int longitudArray);
+void liberarCombinaciones(Punto **Combinaciones, int cantidadCombinaciones);
+void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, Punto combinacion[], int indiceCombinacion, Punto **Combinaciones, int *cantidadCombinaciones);
+void liberarCombinaciones(Punto **Combinaciones, int cantidadCombinaciones);
+int esCuadrado(Punto *combinacion, int longitudArray);
 void ordIntecambio(double arreglo[], int longitud);
 char valoresIguales(double arreglo[], int longitud);
 Punto *IA(Matriz tablero);
@@ -60,5 +69,8 @@ int DiagonalAbajo(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Pun
 int DiagonalArriba(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
 int DiagonalIzq(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
 int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada);
+void guardarPartida(char nick[], int resultado, int cantidadJugadas);
+Jugador *leeResultados(char NombreArchivo[]);
+void guardarResultados(char nombreArchivo[], Jugador jugador);
 
 Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[]);

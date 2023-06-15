@@ -149,17 +149,20 @@ void jugarPartida(char nick[])
     if (bandera1 == bandera2 && bandera1 == 0 && bandera2 == 0)
     {
         printf("\n¡Empate!\n");
+        guardarPartida(nick, 0, turno1);
     }
     else
     {
         if (bandera1 == 1)
         {
             printf("\n¡Gano el Jugador 1!\n");
+            guardarPartida(nick, 1, turno1);
         }
 
         if (bandera2 == 1)
         {
             printf("\n¡Gano el Jugador 2!\n");
+            guardarPartida(nick, 2, turno1);
         }
     }
 }
@@ -1299,4 +1302,76 @@ int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto
     {
         return 100;
     }
+}
+
+void guardarPartida(char nick[], int resultado, int cantidadJugadas)
+{
+    int partidasJugadas;
+    int partidasGanadas;
+    int partidasPeridas;
+    int partidasEmpatadas;
+    char nombreArchivo[100] = "";
+    strcat(nombreArchivo, nick);
+    strcat(nombreArchivo, "_resultados.txt");
+    Jugador *datosJugador = leeResultados(nombreArchivo);
+
+    switch (resultado)
+    {
+    case 0:
+        datosJugador->partidasEmpatadas++;
+        break;
+    case 1:
+        datosJugador->partidasGanadas++;
+        break;
+    case 2:
+        datosJugador->partidasPeridas++;
+        break;
+    }
+
+    guardarResultados(nombreArchivo, *datosJugador);
+}
+
+Jugador *leeResultados(char nombreArchivo[])
+{
+    Archivo *configuracion = abreArchivoGenerico(nombreArchivo, "r");
+    char ganadas[100] = "";
+    char perdidas[100] = "";
+    char empatadas[100] = "";
+    int g = 0, e = 0, p = 0;
+    Jugador *datosJugador = malloc(sizeof(Jugador));
+
+    if (configuracion != NULL && !feof(configuracion->punteroArchivo))
+    {
+        fscanf(configuracion->punteroArchivo, "%s", datosJugador->nick);
+        fscanf(configuracion->punteroArchivo, "%s", ganadas);
+        fscanf(configuracion->punteroArchivo, "%s", ganadas);
+        fscanf(configuracion->punteroArchivo, "%s", ganadas);
+        fscanf(configuracion->punteroArchivo, "%s", perdidas);
+        fscanf(configuracion->punteroArchivo, "%s", empatadas);
+        sscanf(ganadas, "Partidas ganadas=%d", &g);
+        sscanf(ganadas, "Partidas perdidas=%d", &p);
+        sscanf(ganadas, "Partidas empatadas=%d", &e);
+    }
+
+    datosJugador->partidasGanadas = g;
+    datosJugador->partidasPeridas = e;
+    datosJugador->partidasEmpatadas = p;
+    datosJugador->partidasJugadas = datosJugador->partidasEmpatadas + datosJugador->partidasGanadas + datosJugador->partidasPeridas;
+    fclose(configuracion->punteroArchivo);
+    free(configuracion);
+
+    return datosJugador;
+}
+
+void guardarResultados(char nombreArchivo[], Jugador jugador)
+{
+    Archivo *configuracion = abreArchivoGenerico(nombreArchivo, "w");
+    if (configuracion != NULL)
+    {
+        fprintf(configuracion->punteroArchivo, "Partidas ganadas=%d\n", jugador.partidasGanadas);
+        fprintf(configuracion->punteroArchivo, "Partidas perdidas=%d\n", jugador.partidasPeridas);
+        fprintf(configuracion->punteroArchivo, "Partidas empatadas=%d\n", jugador.partidasEmpatadas);
+    }
+    fclose(configuracion->punteroArchivo);
+    free(configuracion);
 }
