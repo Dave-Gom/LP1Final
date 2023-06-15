@@ -102,6 +102,11 @@ void configurarParametros(char nick[])
     // Agrega aquí el código para configurar los parámetros
 }
 
+/**
+ * @brief Despliega las estadisticas del jugador y el ranking de mejores puntajes
+ *
+ * @param nick
+ */
 void verEstadisticas(char nick[])
 {
     printf("\nEstadisticas\n\nJugador: %s\n", nick);
@@ -136,6 +141,10 @@ void verEstadisticas(char nick[])
     }
 }
 
+/**
+ * @brief Inicia el juego
+ * @param nick Nickname del jugador
+ */
 void jugarPartida(char nick[])
 {
     int ancho = 5, alto = 5; //
@@ -196,6 +205,10 @@ void jugarPartida(char nick[])
     }
 }
 
+/**
+ * @brief Despliega el texto de instrucciones del programa y recomendaciones de juego
+ *
+ */
 void mostrarAyuda()
 {
 
@@ -332,6 +345,12 @@ void imprimeMatrizFormat(Matriz matriz)
     printf("\n");
 }
 
+/**
+ * @brief inicializa la matriz del tablero
+ * @param filas
+ * @param columnas
+ * @return
+ */
 Matriz *inicializaMatriz(int filas, int columnas)
 {
     Matriz *ptrMatriz = malloc(sizeof(Matriz));
@@ -347,7 +366,7 @@ Matriz *inicializaMatriz(int filas, int columnas)
     return ptrMatriz;
 }
 
-/*!
+/**
  * @brief agrega una jugada al tablero
  * @param valor
  * @param tablero
@@ -409,6 +428,11 @@ Punto *jugar(int valor, Matriz *tablero, int automatico)
     return nuevoPunto;
 }
 
+/**
+ * @brief Imprime un array de puntos
+ * @param puntos
+ * @param longitud
+ */
 void imprimeJugadas(Punto puntos[], int longitud)
 {
     int i = 0;
@@ -420,7 +444,7 @@ void imprimeJugadas(Punto puntos[], int longitud)
     printf("}");
 }
 
-/*!
+/**
  * @brief Evalua el array de jugadas
  * @param jugadas
  * @param longitud
@@ -454,6 +478,12 @@ int evaluaJugadas(Punto jugadas[], int longitud)
     return bandera;
 }
 
+/**
+ * @brief Calcula la distancia entre dos puntos
+ * @param p1
+ * @param p2
+ * @return
+ */
 double calcularDistancia(Punto p1, Punto p2)
 {
     double dx = p2.x - p1.x;
@@ -461,6 +491,12 @@ double calcularDistancia(Punto p1, Punto p2)
     return sqrt(dx * dx + dy * dy);
 }
 
+/**
+ * @brief Calcula la convinatoria de dos numeros
+ * @param n
+ * @param k
+ * @return
+ */
 int combinatoria(int n, int k)
 {
     if (k == 0 || k == n)
@@ -473,6 +509,17 @@ int combinatoria(int n, int k)
     }
 }
 
+/**
+ * @brief Almacena de forma recursiva todas las convinaciones posibles de 4 elementos de puntos del array jugadas en la matriz
+ *
+ * @param jugadas array de puntos
+ * @param cantJugadas dimension del array de puntos
+ * @param indiceActual posicion de inicio
+ * @param combinacion array combinacion actual
+ * @param indiceCombinacion indice actual array combinacion actual
+ * @param Combinaciones Array de combinacions
+ * @param cantidadCombinaciones dimension del array de combinaciones
+ */
 void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, Punto combinacion[], int indiceCombinacion, Punto **Combinaciones, int *cantidadCombinaciones)
 {
     if (indiceCombinacion == 4)
@@ -502,6 +549,11 @@ void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, 
     almacenarCombinaciones(jugadas, cantJugadas, indiceActual + 1, combinacion, indiceCombinacion + 1, Combinaciones, cantidadCombinaciones);
 }
 
+/**
+ * @brief libera la memoria del array de combinaciones
+ * @param Combinaciones
+ * @param cantidadCombinaciones
+ */
 void liberarCombinaciones(Punto **Combinaciones, int cantidadCombinaciones)
 {
     for (int i = 0; i < cantidadCombinaciones; i++)
@@ -511,7 +563,7 @@ void liberarCombinaciones(Punto **Combinaciones, int cantidadCombinaciones)
     free(Combinaciones);
 }
 
-/*!
+/**
  * @brief Verifica si un array de 4 puntos se corresponde o no con los vertices de un Cuadrado
  * @param combinacion Array de Puntos (obligatoriamente de cuatro elementos)
  * @return 1 si es afirmativo 0 si no
@@ -603,8 +655,6 @@ char valoresIguales(double arreglo[], int longitud)
 /**
  * @brief Asigna en x e y las cordenadas de la mejor jugada posible de la IA
  * @param tablero
- * @param x
- * @param y
  */
 Punto *IA(Matriz tablero)
 {
@@ -691,7 +741,7 @@ Punto *IA(Matriz tablero)
             }
         }
     }
-    if (contador == 0)
+    if (contador == 0) // si aun no hay ningun numero 2
     {
         do
         {
@@ -704,7 +754,7 @@ Punto *IA(Matriz tablero)
         return Jugada;
     }
 
-    if (contador == 1 || cantidadJugadas >= 3 || cantidadJugadas == 0)
+    if (contador == 1 || cantidadJugadas >= 3 || cantidadJugadas == 0) // si solamente hay una jugada, o todas sonel peor caso en el que la cantidad de jugadas para realizar un cuadrado es de 3
     {
         int eleccion = enteroAleatorio(2);
 
@@ -731,12 +781,26 @@ Punto *IA(Matriz tablero)
     return Jugada;
 }
 
+/**
+ * @brief Retrona un valor entero aleatorio menor al limite
+ * @param limite
+ * @return int
+ */
 int enteroAleatorio(int limite) // devuelve un numero entero positivo, negativo o cero aleatorio
 {
     int valor2 = (rand() % limite);
     return valor2;
 }
 
+/**
+ * @brief evalua la minima cantidad e jugadas para formar un cuadrado
+ * @param lado distancie entre el punto evaluado y otro punto
+ * @param tablero estado actual del tablero
+ * @param ubicacion punto a ser evaluado
+ * @param valorAeval valor a verificar en el tablero en la posicion dada
+ * @param jugada puntero a punto en el cual se almacenara la nueva jugada
+ * @return int
+ */
 int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     Punto punto;
@@ -818,6 +882,15 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
     return maxJugadas;
 }
 
+/**
+ * @brief Verifica la cantidad de jugadas necesarias para formar un cuadrado en direccion hacia arriba a la izq
+ * @param lado lado del cuadrado
+ * @param tablero tablero actual
+ * @param ubicacion punto a evaluar
+ * @param valorAeval valor a verificar
+ * @param jugada puntero en el que almacenar una de las jugadas
+ * @return
+ */
 int ArribaIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
@@ -880,6 +953,15 @@ int ArribaIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *j
     return 100;
 }
 
+/**
+ * @brief Verifica la cantidad de jugadas necesarias para formar un cuadrado en direccion hacia arriba a la derecha
+ * @param lado lado del cuadrado
+ * @param tablero tablero actual
+ * @param ubicacion punto a evaluar
+ * @param valorAeval valor a verificar
+ * @param jugada puntero en el que almacenar una de las jugadas
+ * @return
+ */
 int ArribaDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
@@ -944,6 +1026,15 @@ int ArribaDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *
     }
 }
 
+/**
+ * @brief Verifica la cantidad de jugadas necesarias para formar un cuadrado en direccion hacia abajo a la izq
+ * @param lado lado del cuadrado
+ * @param tablero tablero actual
+ * @param ubicacion punto a evaluar
+ * @param valorAeval valor a verificar
+ * @param jugada puntero en el que almacenar una de las jugadas
+ * @return
+ */
 int abajoDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
@@ -1008,6 +1099,15 @@ int abajoDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *j
     }
 }
 
+/**
+ * @brief Verifica la cantidad de jugadas necesarias para formar un cuadrado en direccion hacia abajo a la izq
+ * @param lado lado del cuadrado
+ * @param tablero tablero actual
+ * @param ubicacion punto a evaluar
+ * @param valorAeval valor a verificar
+ * @param jugada puntero en el que almacenar una de las jugadas
+ * @return
+ */
 int AbajoIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
@@ -1070,6 +1170,15 @@ int AbajoIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *ju
     return 100;
 }
 
+/**
+ * @brief Verifica la cantidad de jugadas necesarias para formar un cuadrado en direccion hacia diagonarl hacia abajo
+ * @param lado lado del cuadrado
+ * @param tablero tablero actual
+ * @param ubicacion punto a evaluar
+ * @param valorAeval valor a verificar
+ * @param jugada puntero en el que almacenar una de las jugadas
+ * @return
+ */
 int DiagonalAbajo(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
 
@@ -1137,6 +1246,15 @@ int DiagonalAbajo(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Pun
     }
 }
 
+/**
+ * @brief Verifica la cantidad de jugadas necesarias para formar un cuadrado en direccion hacia diagonarl hacia arriba
+ * @param lado lado del cuadrado
+ * @param tablero tablero actual
+ * @param ubicacion punto a evaluar
+ * @param valorAeval valor a verificar
+ * @param jugada puntero en el que almacenar una de las jugadas
+ * @return
+ */
 int DiagonalArriba(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
@@ -1202,6 +1320,15 @@ int DiagonalArriba(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Pu
     }
 }
 
+/**
+ * @brief Verifica la cantidad de jugadas necesarias para formar un cuadrado en direccion hacia diagonarl hacia la izquierda
+ * @param lado lado del cuadrado
+ * @param tablero tablero actual
+ * @param ubicacion punto a evaluar
+ * @param valorAeval valor a verificar
+ * @param jugada puntero en el que almacenar una de las jugadas
+ * @return
+ */
 int DiagonalIzq(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
@@ -1267,6 +1394,15 @@ int DiagonalIzq(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto
     }
 }
 
+/**
+ * @brief Verifica la cantidad de jugadas necesarias para formar un cuadrado en direccion hacia diagonarl hacia la derecha
+ * @param lado lado del cuadrado
+ * @param tablero tablero actual
+ * @param ubicacion punto a evaluar
+ * @param valorAeval valor a verificar
+ * @param jugada puntero en el que almacenar una de las jugadas
+ * @return
+ */
 int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
     int cantiJugadas = 3;
@@ -1332,6 +1468,12 @@ int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto
     }
 }
 
+/**
+ * @brief Guarda la parti actual en el registro de resultados del jugados, agrega al ranking de ser necesario
+ * @param nick
+ * @param resultado
+ * @param cantidadJugadas
+ */
 void guardarPartida(char nick[], int resultado, int cantidadJugadas)
 {
     int partidasJugadas;
@@ -1359,6 +1501,11 @@ void guardarPartida(char nick[], int resultado, int cantidadJugadas)
     guardarResultados(nombreArchivo, *datosJugador);
 }
 
+/**
+ * @brief Lee los resultados del jugador del archivo dado
+ * @param nombreArchivo
+ * @return *Jugador
+ */
 Jugador *leeResultados(char nombreArchivo[])
 {
     Archivo *configuracion = abreArchivoGenerico(nombreArchivo, "r");
@@ -1386,6 +1533,12 @@ Jugador *leeResultados(char nombreArchivo[])
     return datosJugador;
 }
 
+/**
+ * @brief Guarda los resultados del jugador en el archivo
+ *
+ * @param nombreArchivo
+ * @param jugador
+ */
 void guardarResultados(char nombreArchivo[], Jugador jugador)
 {
     Archivo *configuracion = abreArchivoGenerico(nombreArchivo, "w");
@@ -1399,6 +1552,12 @@ void guardarResultados(char nombreArchivo[], Jugador jugador)
     free(configuracion);
 }
 
+/**
+ * @brief lee la informacin almacenada en el archivo Ranking
+ *
+ * @param ranking
+ * @param dimension
+ */
 void leerRanking(RegistroRanking ranking[], int dimension)
 {
     Archivo *archivoRanking = abreArchivoGenerico("ranking.txt", "rb");
@@ -1418,6 +1577,13 @@ void leerRanking(RegistroRanking ranking[], int dimension)
     free(archivoRanking);
 }
 
+/**
+ * @brief Guarda en el ranking los puntos del jugados
+ *
+ * @attention La cantidad de puntos es inversamente proporcional a la cantidad de jugadas del jugador, los puntos se asignan entre 0 y 1000 puntos
+ * @param nombre
+ * @param jugadas
+ */
 void guardarEnRanking(char nombre[], int jugadas)
 {
     int puntaje = 1000 * ((double)4 / jugadas);
