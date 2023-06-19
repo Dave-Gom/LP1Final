@@ -81,5 +81,7 @@ void guardarResultados(char nombreArchivo[], Jugador jugador);
 void guardarEnRanking(char nombre[], int puntaje);
 void leerRanking(RegistroRanking ranking[], int dimencion);
 void ordIntecambioRegistosRanking(RegistroRanking arreglo[], int longitud);
-
+int evalTablero(Matriz tablero);
+int evaluarfila(Matriz tablero, int filaEval);
+int evaluarColumna(Matriz tablero, int columnaEval);
 Archivo *abreArchivoGenerico(char nombreArchivo[], char modo[]);

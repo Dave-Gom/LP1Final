@@ -181,7 +181,7 @@ void jugarPartida(char nick[])
                 break;
             }
         }
-    } while ((turno1) != (ancho * alto) / 2 || (turno2) != (ancho * alto) / 2);
+    } while (evalTablero(*ptrTablero) == 0);
 
     if (bandera1 == bandera2 && bandera1 == 0 && bandera2 == 0)
     {
@@ -381,7 +381,6 @@ Punto *jugar(int valor, Matriz *tablero, int automatico)
 
     if (automatico == 0)
     {
-
         do
         {
             printf("fila: %d columna: %d\n", tablero->fila, tablero->columna);
@@ -741,6 +740,7 @@ Punto *IA(Matriz tablero)
             }
         }
     }
+
     if (contador == 0) // si aun no hay ningun numero 2
     {
         do
@@ -756,25 +756,70 @@ Punto *IA(Matriz tablero)
 
     if (contador == 1 || cantidadJugadas >= 3 || cantidadJugadas == 0) // si solamente hay una jugada, o todas sonel peor caso en el que la cantidad de jugadas para realizar un cuadrado es de 3
     {
-        int eleccion = enteroAleatorio(2);
+        int filaLlena = evaluarfila(tablero, puntoContenedor2.y);
+        int colLlena = evaluarColumna(tablero, puntoContenedor2.x);
 
-        if (eleccion == 0)
-        { // Elegir un número en la misma fila que la jugada
+        if (filaLlena == 0 && colLlena == 0)
+        {
+            int eleccion = enteroAleatorio(2);
+            if (eleccion == 0)
+            { // Elegir un número en la misma fila que la jugada
+                Jugada->y = puntoContenedor2.y;
+
+                do
+                {
+                    Jugada->x = enteroAleatorio(tablero.columna);
+                    printf("Esto\n");
+
+                } while (Jugada->x == puntoContenedor2.x || tablero.matriz[puntoContenedor2.y][Jugada->x] != 0);
+            }
+            else
+            { // Elegir un número en la misma columna que la jugada
+                Jugada->x = puntoContenedor2.x;
+
+                do
+                {
+                    Jugada->y = enteroAleatorio(tablero.fila);
+                    printf("Noo Esto\n");
+
+                } while (Jugada->y == puntoContenedor2.y || tablero.matriz[Jugada->y][puntoContenedor2.x] != 0);
+            }
+        }
+
+        if (filaLlena == 0 && colLlena == 1)
+        {
             Jugada->y = puntoContenedor2.y;
 
             do
             {
                 Jugada->x = enteroAleatorio(tablero.columna);
+                printf("Esto\n");
+
             } while (Jugada->x == puntoContenedor2.x || tablero.matriz[puntoContenedor2.y][Jugada->x] != 0);
         }
-        else
-        { // Elegir un número en la misma columna que la jugada
+
+        if (filaLlena == 1 && colLlena == 0)
+        {
             Jugada->x = puntoContenedor2.x;
 
             do
             {
                 Jugada->y = enteroAleatorio(tablero.fila);
+                printf("Noo Esto\n");
+
             } while (Jugada->y == puntoContenedor2.y || tablero.matriz[Jugada->y][puntoContenedor2.x] != 0);
+        }
+
+        if (filaLlena == 1 && colLlena == 1)
+        {
+            do
+            {
+                i = enteroAleatorio(tablero.fila);
+                j = enteroAleatorio(tablero.columna);
+            } while (tablero.matriz[i][j] != 0);
+
+            Jugada->x = j;
+            Jugada->y = i;
         }
     }
 
@@ -1637,4 +1682,64 @@ void ordIntecambioRegistosRanking(RegistroRanking arreglo[], int longitud)
             }
         }
     }
+}
+
+/**
+ * @brief Evalue si el tablero esta lleno o no
+ * @param tablero
+ * @return 1 si esta lleno cero si no
+ */
+int evalTablero(Matriz tablero)
+{
+    int i, j;
+    for (i = 0; i < tablero.fila; i++)
+    {
+        for (j = 0; j < tablero.columna; j++)
+        {
+            if (tablero.matriz[i][j] == 0)
+            {
+                return 0;
+            }
+        }
+    }
+
+    return 1;
+}
+
+/**
+ * @brief Evalua si una fila del tablero esta llena
+ * @param tablero
+ * @param filaEval
+ * @return 1 si esta llena cero si no
+ */
+int evaluarfila(Matriz tablero, int filaEval)
+{
+    int i;
+    for (i = 0; i < tablero.columna; i++)
+    {
+        if (tablero.matriz[filaEval][i] == 0)
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+/**
+ * @brief Evalua si una columna del tablero esta llena
+ * @param tablero
+ * @param filaEval
+ * @return 1 si esta llena cero si no
+ */
+int evaluarColumna(Matriz tablero, int culumnaEval)
+{
+    int i;
+    for (i = 0; i < tablero.fila; i++)
+    {
+        if (tablero.matriz[i][culumnaEval] == 0)
+        {
+            return 0;
+        }
+    }
+    return 1;
 }
