@@ -134,9 +134,13 @@ void verEstadisticas(char nick[])
     printf("\nRanking Mejores puntajes\n\n");
     for (i = 0; i < 5; i++)
     {
-        if (strlen(rankingActual[i].nick) != 0)
+        if (strcmp(rankingActual[i].nick, "") != 0 && rankingActual[i].puntaje != 0)
         {
             printf("#%d %s\t%d pts.\n", i + 1, rankingActual[i].nick, rankingActual[i].puntaje);
+        }
+        else
+        {
+            printf("#%d %s\n", i + 1, "Sin datos");
         }
     }
 }
@@ -1610,6 +1614,9 @@ void leerRanking(RegistroRanking ranking[], int dimension)
     int indice = 0;
     while (indice < dimension && !feof(archivoRanking->punteroArchivo))
     {
+        strcpy(ranking[indice].nick, "");
+        ranking[indice].puntaje = 0;
+
         fseek(archivoRanking->punteroArchivo, indice * sizeof(RegistroRanking), SEEK_SET); // establece el apuntador a la posicion del numero de cuenta del nuevo Registro
         fread(&registroAux, sizeof(RegistroRanking), 1, archivoRanking->punteroArchivo);
         strcpy(ranking[indice].nick, registroAux.nick);
