@@ -22,7 +22,7 @@ void inicia(char nick[])
         printf("6. Salir.\n");
         printf("Ingresa el número de la opción deseada: ");
         scanf("%d", &opcion);
-
+        printf("\n");
         switch (opcion)
         {
         case 1:
@@ -439,7 +439,7 @@ Punto *jugar(int valor, Matriz *tablero, int automatico)
             nuevoPunto = IA(*tablero);
         } while (tablero->matriz[nuevoPunto->y][nuevoPunto->x] != 0);
 
-        printf("Jugador 2: (%d,%d)", nuevoPunto->x, nuevoPunto->y);
+        printf("\nJugador 2: (%d,%d)", nuevoPunto->x, nuevoPunto->y);
     }
 
     tablero->matriz[nuevoPunto->y][nuevoPunto->x] = valor;
@@ -1686,6 +1686,7 @@ void leerRanking(RegistroRanking ranking[], int dimension)
         indice++;
         strcpy(registroAux.nick, "");
         registroAux.puntaje = 0;
+        rewind(archivoRanking->punteroArchivo);
     }
     fclose(archivoRanking->punteroArchivo);
     free(archivoRanking);
