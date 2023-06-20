@@ -3,6 +3,8 @@
 /**
  * @brief funcion central del juego, despliega el menu y decide que funcion llamar atendiendo a la seleccion del usuario
  * @param nick
+ *
+ * @author David Gomez
  */
 void inicia(char nick[])
 {
@@ -52,6 +54,8 @@ void inicia(char nick[])
 /**
  * @brief Lee la configuracion de dimension del tablero
  * @param nick
+ *
+ * @author David Gomez
  */
 void visualizarConfiguracion(char nick[])
 {
@@ -70,6 +74,8 @@ void visualizarConfiguracion(char nick[])
 /**
  * @brief Carga los datos del tablero y los guarda en el archivo _configuracion.txt
  * @param nick
+ *
+ * @author David Gomez
  */
 void configurarParametros(char nick[])
 {
@@ -106,6 +112,8 @@ void configurarParametros(char nick[])
  * @brief Despliega las estadisticas del jugador y el ranking de mejores puntajes
  *
  * @param nick
+ *
+ * @author David Gomez
  */
 void verEstadisticas(char nick[])
 {
@@ -148,6 +156,8 @@ void verEstadisticas(char nick[])
 /**
  * @brief Inicia el juego
  * @param nick Nickname del jugador
+ *
+ * @author David Gomez
  */
 void jugarPartida(char nick[])
 {
@@ -212,6 +222,8 @@ void jugarPartida(char nick[])
 /**
  * @brief Despliega el texto de instrucciones del programa y recomendaciones de juego
  *
+ *
+ * @author David Gomez
  */
 void mostrarAyuda()
 {
@@ -330,6 +342,8 @@ void iniciaMatriz(Matriz *ptrMatriz)
  * @param filas Cantidad de filas
  * @param columnas Cantidad de columnas
  * @param Matriz Matriz a ser impresa
+ *
+ * @author David Gomez
  */
 void imprimeMatrizFormat(Matriz matriz)
 {
@@ -376,6 +390,8 @@ Matriz *inicializaMatriz(int filas, int columnas)
  * @param tablero
  * @param automatico
  * @return
+ *
+ * @author David Gomez
  */
 Punto *jugar(int valor, Matriz *tablero, int automatico)
 {
@@ -435,6 +451,8 @@ Punto *jugar(int valor, Matriz *tablero, int automatico)
  * @brief Imprime un array de puntos
  * @param puntos
  * @param longitud
+ *
+ * @author David Gomez
  */
 void imprimeJugadas(Punto puntos[], int longitud)
 {
@@ -452,6 +470,8 @@ void imprimeJugadas(Punto puntos[], int longitud)
  * @param jugadas
  * @param longitud
  * @return 1 si hay un cuadrado, 0 en caso contrario
+ *
+ * @author David Gomez
  */
 int evaluaJugadas(Punto jugadas[], int longitud)
 {
@@ -486,6 +506,8 @@ int evaluaJugadas(Punto jugadas[], int longitud)
  * @param p1
  * @param p2
  * @return
+ *
+ * @author David Gomez
  */
 double calcularDistancia(Punto p1, Punto p2)
 {
@@ -499,6 +521,8 @@ double calcularDistancia(Punto p1, Punto p2)
  * @param n
  * @param k
  * @return
+ *
+ * @author David Gomez
  */
 int combinatoria(int n, int k)
 {
@@ -522,6 +546,8 @@ int combinatoria(int n, int k)
  * @param indiceCombinacion indice actual array combinacion actual
  * @param Combinaciones Array de combinacions
  * @param cantidadCombinaciones dimension del array de combinaciones
+ *
+ * @author David Gomez
  */
 void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, Punto combinacion[], int indiceCombinacion, Punto **Combinaciones, int *cantidadCombinaciones)
 {
@@ -556,6 +582,8 @@ void almacenarCombinaciones(Punto jugadas[], int cantJugadas, int indiceActual, 
  * @brief libera la memoria del array de combinaciones
  * @param Combinaciones
  * @param cantidadCombinaciones
+ *
+ * @author David Gomez
  */
 void liberarCombinaciones(Punto **Combinaciones, int cantidadCombinaciones)
 {
@@ -570,6 +598,8 @@ void liberarCombinaciones(Punto **Combinaciones, int cantidadCombinaciones)
  * @brief Verifica si un array de 4 puntos se corresponde o no con los vertices de un Cuadrado
  * @param combinacion Array de Puntos (obligatoriamente de cuatro elementos)
  * @return 1 si es afirmativo 0 si no
+ *
+ * @author David Gomez
  */
 int esCuadrado(Punto *combinacion, int longitudArray)
 {
@@ -606,6 +636,8 @@ int esCuadrado(Punto *combinacion, int longitudArray)
  *
  * @param arreglo Arreglo a ser ordeneado
  * @param longitud Dimension del arreglo
+ *
+ * @author David Gomez
  */
 void ordIntecambio(double arreglo[], int longitud)
 {
@@ -632,6 +664,8 @@ void ordIntecambio(double arreglo[], int longitud)
  * @param arreglo
  * @param longitud
  * @return 's' si todos son iguales 'n' en caso contrario
+ *
+ * @author David Gomez
  */
 char valoresIguales(double arreglo[], int longitud)
 {
@@ -658,6 +692,8 @@ char valoresIguales(double arreglo[], int longitud)
 /**
  * @brief Asigna en x e y las cordenadas de la mejor jugada posible de la IA
  * @param tablero
+ *
+ * @author David Gomez
  */
 Punto *IA(Matriz tablero)
 {
@@ -834,6 +870,8 @@ Punto *IA(Matriz tablero)
  * @brief Retrona un valor entero aleatorio menor al limite
  * @param limite
  * @return int
+ *
+ * @author David Gomez
  */
 int enteroAleatorio(int limite) // devuelve un numero entero positivo, negativo o cero aleatorio
 {
@@ -938,7 +976,9 @@ int calcularMinimaCantidad(int lado, Matriz tablero, Punto ubicacion, int valorA
  * @param ubicacion punto a evaluar
  * @param valorAeval valor a verificar
  * @param jugada puntero en el que almacenar una de las jugadas
- * @return
+ * @return int
+ *
+ * @author David Gomez
  */
 int ArribaIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
@@ -1009,7 +1049,9 @@ int ArribaIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *j
  * @param ubicacion punto a evaluar
  * @param valorAeval valor a verificar
  * @param jugada puntero en el que almacenar una de las jugadas
- * @return
+ * @return int
+ *
+ * @author David Gomez
  */
 int ArribaDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
@@ -1082,7 +1124,9 @@ int ArribaDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *
  * @param ubicacion punto a evaluar
  * @param valorAeval valor a verificar
  * @param jugada puntero en el que almacenar una de las jugadas
- * @return
+ * @return int
+ *
+ * @author David Gomez
  */
 int abajoDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
@@ -1155,7 +1199,9 @@ int abajoDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *j
  * @param ubicacion punto a evaluar
  * @param valorAeval valor a verificar
  * @param jugada puntero en el que almacenar una de las jugadas
- * @return
+ * @return int
+ *
+ * @author David Gomez
  */
 int AbajoIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
@@ -1226,7 +1272,9 @@ int AbajoIz(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *ju
  * @param ubicacion punto a evaluar
  * @param valorAeval valor a verificar
  * @param jugada puntero en el que almacenar una de las jugadas
- * @return
+ * @return int
+ *
+ * @author David Gomez
  */
 int DiagonalAbajo(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
@@ -1302,7 +1350,9 @@ int DiagonalAbajo(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Pun
  * @param ubicacion punto a evaluar
  * @param valorAeval valor a verificar
  * @param jugada puntero en el que almacenar una de las jugadas
- * @return
+ * @return int
+ *
+ * @author David Gomez
  */
 int DiagonalArriba(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
@@ -1376,7 +1426,9 @@ int DiagonalArriba(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Pu
  * @param ubicacion punto a evaluar
  * @param valorAeval valor a verificar
  * @param jugada puntero en el que almacenar una de las jugadas
- * @return
+ * @return int
+ *
+ * @author David Gomez
  */
 int DiagonalIzq(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
@@ -1450,7 +1502,9 @@ int DiagonalIzq(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto
  * @param ubicacion punto a evaluar
  * @param valorAeval valor a verificar
  * @param jugada puntero en el que almacenar una de las jugadas
- * @return
+ * @return int
+ *
+ * @author David Gomez
  */
 int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto *jugada)
 {
@@ -1522,6 +1576,8 @@ int DiagonalDer(int lado, Matriz tablero, Punto ubicacion, int valorAeval, Punto
  * @param nick
  * @param resultado
  * @param cantidadJugadas
+ *
+ * @author David Gomez
  */
 void guardarPartida(char nick[], int resultado, int cantidadJugadas)
 {
@@ -1554,6 +1610,8 @@ void guardarPartida(char nick[], int resultado, int cantidadJugadas)
  * @brief Lee los resultados del jugador del archivo dado
  * @param nombreArchivo
  * @return *Jugador
+ *
+ * @author David Gomez
  */
 Jugador *leeResultados(char nombreArchivo[])
 {
@@ -1587,6 +1645,8 @@ Jugador *leeResultados(char nombreArchivo[])
  *
  * @param nombreArchivo
  * @param jugador
+ *
+ * @author David Gomez
  */
 void guardarResultados(char nombreArchivo[], Jugador jugador)
 {
@@ -1606,6 +1666,8 @@ void guardarResultados(char nombreArchivo[], Jugador jugador)
  *
  * @param ranking
  * @param dimension
+ *
+ * @author David Gomez
  */
 void leerRanking(RegistroRanking ranking[], int dimension)
 {
@@ -1635,6 +1697,8 @@ void leerRanking(RegistroRanking ranking[], int dimension)
  * @attention La cantidad de puntos es inversamente proporcional a la cantidad de jugadas del jugador, los puntos se asignan entre 0 y 1000 puntos
  * @param nombre
  * @param jugadas
+ *
+ * @author David Gomez
  */
 void guardarEnRanking(char nombre[], int jugadas)
 {
@@ -1666,6 +1730,8 @@ void guardarEnRanking(char nombre[], int jugadas)
  *
  * @param arreglo Arreglo a ser ordeneado
  * @param longitud Dimension del arreglo
+ *
+ * @author David Gomez
  */
 void ordIntecambioRegistosRanking(RegistroRanking arreglo[], int longitud)
 {
@@ -1695,6 +1761,8 @@ void ordIntecambioRegistosRanking(RegistroRanking arreglo[], int longitud)
  * @brief Evalue si el tablero esta lleno o no
  * @param tablero
  * @return 1 si esta lleno cero si no
+ *
+ * @author David Gomez
  */
 int evalTablero(Matriz tablero)
 {
@@ -1718,6 +1786,8 @@ int evalTablero(Matriz tablero)
  * @param tablero
  * @param filaEval
  * @return 1 si esta llena cero si no
+ *
+ * @author David Gomez
  */
 int evaluarfila(Matriz tablero, int filaEval)
 {
@@ -1737,6 +1807,8 @@ int evaluarfila(Matriz tablero, int filaEval)
  * @param tablero
  * @param filaEval
  * @return 1 si esta llena cero si no
+ *
+ * @author David Gomez
  */
 int evaluarColumna(Matriz tablero, int culumnaEval)
 {
