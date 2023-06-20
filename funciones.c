@@ -403,7 +403,6 @@ Punto *jugar(int valor, Matriz *tablero, int automatico)
     {
         do
         {
-            printf("fila: %d columna: %d\n", tablero->fila, tablero->columna);
 
             printf("Ingrese la fila: ");
             scanf("%d", &y);
@@ -437,7 +436,7 @@ Punto *jugar(int valor, Matriz *tablero, int automatico)
             nuevoPunto = IA(*tablero);
         } while (tablero->matriz[nuevoPunto->y][nuevoPunto->x] != 0);
 
-        printf("\nJugador 2: (%d,%d)", nuevoPunto->x, nuevoPunto->y);
+        printf("\nJugador 2(IA): (%d,%d)", nuevoPunto->x, nuevoPunto->y);
     }
 
     tablero->matriz[nuevoPunto->y][nuevoPunto->x] = valor;
@@ -807,7 +806,6 @@ Punto *IA(Matriz tablero)
                 do
                 {
                     Jugada->x = enteroAleatorio(tablero.columna);
-                    printf("Esto\n");
 
                 } while (Jugada->x == puntoContenedor2.x || tablero.matriz[puntoContenedor2.y][Jugada->x] != 0);
             }
@@ -818,7 +816,6 @@ Punto *IA(Matriz tablero)
                 do
                 {
                     Jugada->y = enteroAleatorio(tablero.fila);
-                    printf("Noo Esto\n");
 
                 } while (Jugada->y == puntoContenedor2.y || tablero.matriz[Jugada->y][puntoContenedor2.x] != 0);
             }
@@ -831,7 +828,6 @@ Punto *IA(Matriz tablero)
             do
             {
                 Jugada->x = enteroAleatorio(tablero.columna);
-                printf("Esto\n");
 
             } while (Jugada->x == puntoContenedor2.x || tablero.matriz[puntoContenedor2.y][Jugada->x] != 0);
         }
@@ -843,7 +839,6 @@ Punto *IA(Matriz tablero)
             do
             {
                 Jugada->y = enteroAleatorio(tablero.fila);
-                printf("Noo Esto\n");
 
             } while (Jugada->y == puntoContenedor2.y || tablero.matriz[Jugada->y][puntoContenedor2.x] != 0);
         }
