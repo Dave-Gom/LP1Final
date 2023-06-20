@@ -413,9 +413,7 @@ Punto *jugar(int valor, Matriz *tablero, int automatico)
 
             if (x >= tablero->columna || y >= tablero->fila || y < 0 || x < 0)
             {
-                printf("Los valores para la fila deben estar en [0 , %d].\nLos valores de la columna deben estar en [0,%d]\n", tablero->fila - 1, tablero->columna - 1);
-                printf("Fila %d, Columna: %d\n", tablero->fila, tablero->columna);
-                printf("Fila %d, Columna: %d\n", y, x);
+                printf("Los valores para la fila deben estar en [0,%d].\nLos valores de la columna deben estar en [0,%d]\n", tablero->fila - 1, tablero->columna - 1);
                 continue;
             }
 
