@@ -13,7 +13,7 @@ void inicia(char nick[])
     do
     {
 
-        printf("A continuación, muestra por pantalla el siguiente menú:\n");
+        printf("\nSelecciona una opcion:\n");
         printf("1. Visualizar configuración del tablero.\n");
         printf("2. Configurar parámetros.\n");
         printf("3. Ver estadísticas.\n");
